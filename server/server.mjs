@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-// opens db and starts the Express server
+// opens db connection and starts the Express server
 db.once('open', () => {
   app.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`);
