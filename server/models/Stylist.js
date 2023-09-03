@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { hash, compareSync } = require("bcrypt");
+const { hashSync, compareSync } = require("bcrypt");
 
 const stylistSchema = new Schema({
   name: {
@@ -46,7 +46,7 @@ const stylistSchema = new Schema({
 stylistSchema.pre("save", function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
-    this.password = hash(this.password, saltRounds);
+    this.password = hashSync(this.password, saltRounds);
   }
   next();
 });
