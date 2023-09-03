@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 mongoose.connect(
   process.env.ATLAS_URI,
@@ -8,4 +8,4 @@ mongoose.connect(
   }
 );
 
-export default mongoose.connection;
+module.exports = mongoose.connection;
