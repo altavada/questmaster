@@ -19,4 +19,13 @@ module.exports = {
       res.status(500).json({ message: "Error fetching stylists." });
     }
   },
+  async getStylist({ stylist = null, params }, res) {
+    const foundStylist = await Stylist.findOne({
+      $or: [{ _id: stylist ? stylist._id : params.id }, { name: params.name }],
+    });
+    if (!foundStylist) {
+      return res.status(400).json({ message: "User not found." });
+    }
+    res.json(foundStylist);
+  },
 };
