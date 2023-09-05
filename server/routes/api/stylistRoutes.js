@@ -1,7 +1,5 @@
-import express from "express";
-import Stylist from "../../models/Stylist";
-
-const router = express.Router();
+const router = require("express").Router();
+const Stylist = require("../../models/Stylist");
 
 // create new stylist
 router.post("/", async (req, res) => {
@@ -28,4 +26,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

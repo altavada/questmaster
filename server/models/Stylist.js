@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import { hash, compareSync } from "bcrypt";
+const { Schema, model } = require("mongoose");
+const { hash, compareSync } = require("bcrypt");
 
 const stylistSchema = new Schema({
   name: {
@@ -59,10 +59,10 @@ stylistSchema.pre("save", function (next) {
   next();
 });
 
-adminSchema.methods.isCorrectPassword = function (password) {
+stylistSchema.methods.isCorrectPassword = function (password) {
   return compareSync(password, this.password);
 };
 
 const Stylist = model("Stylist", stylistSchema);
 
-export default Stylist;
+module.exports = Stylist;

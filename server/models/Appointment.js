@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
 
 const apptSchema = new Schema({
   date: {
@@ -27,4 +27,4 @@ const apptSchema = new Schema({
 
 const Appointment = model("Appointment", apptSchema);
 
-export default Appointment;
+module.exports = Appointment;
