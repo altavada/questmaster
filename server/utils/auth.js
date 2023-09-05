@@ -26,8 +26,8 @@ module.exports = {
 
     return req;
   },
-  signToken: ({ firstName, email, _id }) => {
-    const payload = { firstName, email, _id };
+  signToken: ({ name, email, _id, isAdmin }) => {
+    const payload = { name, email, _id, isAdmin };
 
     return sign({ data: payload }, secret, { expiresIn: expiration });
   },
