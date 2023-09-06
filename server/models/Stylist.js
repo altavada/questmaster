@@ -52,8 +52,12 @@ stylistSchema.pre("save", function (next) {
 });
 
 stylistSchema.pre("save", function (next) {
-  if (this.isNew && this.adminKey === "skipper") {
-    this.isAdmin = true;
+  if (this.isNew || this.isModified("adminKey")) {
+    if (this.adminKey === process.env.ADMIN_KEY) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
     this.adminKey = "default";
   }
   next();
