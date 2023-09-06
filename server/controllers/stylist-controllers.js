@@ -42,9 +42,9 @@ module.exports = {
     const token = signToken(stylist);
     res.json({ token, stylist });
   },
-  async updateStylist({ params, body }, res) {
+  async updateStylist({ stylist, body }, res) {
     try {
-      const thisStylist = await Stylist.findOne({ _id: params.id });
+      const thisStylist = await Stylist.findOne({ _id: stylist._id });
       if (!thisStylist) {
         return res.status(400).json({ message: "User not found" });
       }
@@ -61,6 +61,21 @@ module.exports = {
     } catch (err) {
       console.log(err);
       return res.status(400).json(err);
+    }
+  },
+  async deleteStylist({ stylist, params }, res) {
+    try {
+      if (!stylist.isAdmin) {
+        return res.status(400).json({ message: "Access denied." });
+      }
+      const deleted = await Stylist.findOneAndDelete({ name: params.name });
+      if (!deleted) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ message: "User deleted", deleted });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
     }
   },
 };

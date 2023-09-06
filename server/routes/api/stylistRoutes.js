@@ -6,6 +6,7 @@ const {
   getStylist,
   login,
   updateStylist,
+  deleteStylist
 } = require("../../controllers/stylist-controllers");
 
 const { authMiddleware } = require("../../utils/auth");
@@ -13,7 +14,7 @@ const { authMiddleware } = require("../../utils/auth");
 router.route("/").post(createStylist).get(getAllStylists);
 router.route("/login").post(login);
 router.route("/me").get(authMiddleware, getStylist);
-router.route("/:name").get(getStylist);
-router.route("/:id").put(updateStylist);
+router.route("/:name").get(getStylist).delete(authMiddleware, deleteStylist);
+router.route("/update").put(authMiddleware, updateStylist);
 
 module.exports = router;
