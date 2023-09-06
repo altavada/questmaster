@@ -1,4 +1,4 @@
-const { verify, sign } = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 const secret = "hushhush";
 const expiration = "2h";
@@ -32,6 +32,6 @@ module.exports = {
   signToken: ({ name, email, _id, isAdmin }) => {
     const payload = { name, email, _id, isAdmin };
 
-    return sign({ data: payload }, secret, { expiresIn: expiration });
+    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
 };

@@ -28,4 +28,54 @@ module.exports = {
     }
     res.json(foundStylist);
   },
+  async login({ body }, res) {
+    const stylist = await Stylist.findOne({
+      $or: [{ name: body.name }, { email: body.email }],
+    });
+    if (!stylist) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    const pwcheck = await stylist.isCorrectPassword(body.password);
+    if (!pwcheck) {
+      return res.status(400).json({ message: "Wrong credentials" });
+    }
+    const token = signToken(stylist);
+    res.json({ token, stylist });
+  },
+  async updateStylist({ stylist, body }, res) {
+    try {
+      const thisStylist = await Stylist.findOne({ _id: stylist._id });
+      if (!thisStylist) {
+        return res.status(400).json({ message: "User not found" });
+      }
+      thisStylist.name = body.name || thisStylist.name;
+      thisStylist.title = body.title || thisStylist.title;
+      thisStylist.bio = body.bio || thisStylist.bio;
+      thisStylist.image_url = body.image_url || thisStylist.image_url;
+      thisStylist.email = body.email || thisStylist.email;
+      thisStylist.password = body.password || thisStylist.password;
+      thisStylist.adminKey = body.adminKey || thisStylist.adminKey;
+      await thisStylist.save();
+      const token = signToken(thisStylist);
+      res.json({ message: "Stylist updated!", token, thisStylist });
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err);
+    }
+  },
+  async deleteStylist({ stylist, params }, res) {
+    try {
+      if (!stylist.isAdmin) {
+        return res.status(400).json({ message: "Access denied." });
+      }
+      const deleted = await Stylist.findOneAndDelete({ name: params.name });
+      if (!deleted) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ message: "User deleted", deleted });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
 };
