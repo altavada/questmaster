@@ -45,4 +45,23 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+  async getApptsByStylist({ params }, res) {
+    try {
+      const stylistId = params.stylist;
+      const stylist = await Stylist.findById(stylistId);
+      if (!stylist) {
+        return res.status(400).json({ message: "No such stylist" });
+      }
+      const appointments = await Appt.find({ stylist: stylistId });
+      if (!appointments) {
+        return res
+          .status(400)
+          .json({ message: "Stylist currently has no appointments" });
+      }
+      res.json(appointments);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
+    }
+  },
 };
