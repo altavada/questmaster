@@ -18,6 +18,9 @@ module.exports = {
   async getAllStylists(req, res) {
     try {
       const stylists = await Stylist.find();
+      if (!stylists) {
+        return res.status(400).json({ message: "No stylists found" });
+      }
       res.json(stylists);
     } catch (err) {
       console.error(err);
