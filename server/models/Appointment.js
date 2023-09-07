@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, models } = require("mongoose");
+const Stylist = require("./Stylist");
 
 const apptSchema = new Schema({
   date: {
@@ -14,6 +15,7 @@ const apptSchema = new Schema({
     ref: "Stylist",
     required: true,
   },
+  stylistName: String,
   customer: {
     type: String,
     required: true,
@@ -23,6 +25,34 @@ const apptSchema = new Schema({
     type: String,
     required: true,
   },
+  service: {
+    type: String,
+    required: true,
+  },
+});
+
+// middleware to prevent double-booking
+apptSchema.pre("save", async function (next) {
+  const appt = this;
+  const isDoubleBooked = await models.Appointment.exists({
+    _id: { $ne: appt._id },
+    date: appt.date,
+    time: appt.time,
+    stylist: appt.stylist,
+  });
+  if (isDoubleBooked) {
+    const err = "Cannot double-book appointments";
+    return next(new Error(err));
+  }
+  next();
+});
+
+apptSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified("stylist")) {
+    const stylist = await Stylist.findById(this.stylist);
+    this.stylistName = stylist.name;
+  }
+  next();
 });
 
 const Appointment = model("Appointment", apptSchema);
