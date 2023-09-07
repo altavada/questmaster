@@ -64,4 +64,27 @@ module.exports = {
       res.status(500).json({ message: "Internal server error", err });
     }
   },
+  // "stylist" data from authMiddleware, must be admin or assigned stylist
+  async updateAppt({ stylist, body }, res) {
+    try {
+      const appt = await Appt.findById(body.id);
+      if (!appt) {
+        return res.status(400).json({ message: "Appointment not found" });
+      }
+      if (appt.stylist != stylist._id && !stylist.isAdmin) {
+        return res.status(400).json({ message: "Permission denied" });
+      }
+      appt.date = body.date || appt.date;
+      appt.time = body.time || appt.time;
+      appt.stylist = body.stylist || appt.stylist;
+      appt.name = body.name || appt.name;
+      appt.phone = body.phone || appt.phone;
+      appt.service = body.service || appt.service;
+      await appt.save();
+      res.json({ message: "Appointment updated!" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
+    }
+  },
 };

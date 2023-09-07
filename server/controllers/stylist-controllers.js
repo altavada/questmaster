@@ -63,6 +63,7 @@ module.exports = {
       res.status(500).json({ message: "Internal server error", err });
     }
   },
+  // users can update only their own personal info
   async updateStylist({ stylist, body }, res) {
     try {
       const thisStylist = await Stylist.findOne({ _id: stylist._id });
@@ -84,6 +85,7 @@ module.exports = {
       return res.status(500).json({ message: "Error updating stylist", err });
     }
   },
+  // admins can remove accounts from database
   async deleteStylist({ stylist, params }, res) {
     try {
       if (!stylist.isAdmin) {
