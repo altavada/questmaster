@@ -6,12 +6,13 @@ const {
   getOneAppt,
   getApptsByStylist,
   updateAppt,
+  cancelAppt,
 } = require("../../controllers/appt-controllers");
 
 const { authMiddleware } = require("../../utils/auth");
 
 router.route("/").post(createAppt).get(getAppts);
-router.route("/:id").get(getOneAppt);
+router.route("/:id").get(getOneAppt).delete(authMiddleware, cancelAppt);
 router.route("/stylist/:stylist").get(getApptsByStylist);
 router.route("/update").put(authMiddleware, updateAppt);
 

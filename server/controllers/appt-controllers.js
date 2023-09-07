@@ -64,15 +64,17 @@ module.exports = {
       res.status(500).json({ message: "Internal server error", err });
     }
   },
-  // "stylist" data from authMiddleware, must be admin or assigned stylist
-  async updateAppt({ stylist, body }, res) {
+  // "stylist" data from authMiddleware, must be admin or currently-assigned stylist
+  // localhost:3001/api/appointments/update
+  // request must contain body.id (appointment ID)
+  async updateAppt({ user, body }, res) {
     try {
+      if (!user.isAdmin) {
+        return res.status(400).json({ message: "Permission denied" });
+      }
       const appt = await Appt.findById(body.id);
       if (!appt) {
         return res.status(400).json({ message: "Appointment not found" });
-      }
-      if (appt.stylist != stylist._id && !stylist.isAdmin) {
-        return res.status(400).json({ message: "Permission denied" });
       }
       appt.date = body.date || appt.date;
       appt.time = body.time || appt.time;
@@ -85,6 +87,27 @@ module.exports = {
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Internal server error", err });
+    }
+  },
+  async cancelAppt({ user, params }, res) {
+    try {
+      if (!user.isAdmin) {
+        return res.status(400).json({ message: "Permission denied" });
+      }
+      const deleted = await Appt.findOneAndDelete({ _id: params.id });
+      if (!deleted) {
+        return res.status(404).json({ message: "Appointment not found" });
+      }
+      const stylistId = deleted.stylist;
+      const stylist = await Stylist.findByIdAndUpdate(
+        stylistId,
+        { $pull: { appointments: params.id } },
+        { new: true }
+      );
+      res.json({ message: "Appointment canceled", deleted, stylist });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error", err });
     }
   },
 };

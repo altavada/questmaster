@@ -1,4 +1,5 @@
 const { Schema, model, models } = require("mongoose");
+const Stylist = require("./Stylist");
 
 const apptSchema = new Schema({
   date: {
@@ -14,6 +15,7 @@ const apptSchema = new Schema({
     ref: "Stylist",
     required: true,
   },
+  stylistName: String,
   customer: {
     type: String,
     required: true,
@@ -41,6 +43,14 @@ apptSchema.pre("save", async function (next) {
   if (isDoubleBooked) {
     const err = "Cannot double-book appointments";
     return next(new Error(err));
+  }
+  next();
+});
+
+apptSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified("stylist")) {
+    const stylist = await Stylist.findById(this.stylist);
+    this.stylistName = stylist.name;
   }
   next();
 });
