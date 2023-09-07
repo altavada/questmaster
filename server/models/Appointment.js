@@ -25,6 +25,20 @@ const apptSchema = new Schema({
   },
 });
 
+apptSchema.pre("save", async function (next) {
+  const isDoubleBooked = await mongoose.models.Appointment.exists({
+    _id: { $ne: this._id },
+    date: this.date,
+    time: this.time,
+    stylist: this.stylist,
+  });
+  if (isDoubleBooked) {
+    const err = "Cannot double-book appointments";
+    return next(new Error(err));
+  }
+  next();
+});
+
 const Appointment = model("Appointment", apptSchema);
 
 module.exports = Appointment;
