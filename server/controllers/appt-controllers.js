@@ -14,7 +14,6 @@ module.exports = {
       }
       stylist.appointments.push(appt._id);
       await stylist.save();
-      console.log(stylist);
       res.json({ message: "Appointment created!", appt });
     } catch (err) {
       console.error(err);

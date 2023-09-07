@@ -3,44 +3,62 @@ const { signToken } = require("../utils/auth");
 
 module.exports = {
   async createStylist({ body }, res) {
-    const stylist = await Stylist.create(body);
-    if (!stylist) {
-      return res.status(400).json({ message: "Error creating stylist." });
+    try {
+      const stylist = await Stylist.create(body);
+      if (!stylist) {
+        return res.status(400).json({ message: "Error creating stylist." });
+      }
+      const token = signToken(stylist);
+      res.json({ message: "New stylist created!", token, stylist });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
     }
-    const token = signToken(stylist);
-    res.json({ message: "New stylist created!", token, stylist });
   },
   async getAllStylists(req, res) {
     try {
       const stylists = await Stylist.find();
       res.json(stylists);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error fetching stylists." });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Error fetching stylists.", err });
     }
   },
   async getStylist({ stylist = null, params }, res) {
-    const foundStylist = await Stylist.findOne({
-      $or: [{ _id: stylist ? stylist._id : params.id }, { name: params.name }],
-    });
-    if (!foundStylist) {
-      return res.status(400).json({ message: "User not found." });
+    try {
+      const foundStylist = await Stylist.findOne({
+        $or: [
+          { _id: stylist ? stylist._id : params.id },
+          { name: params.name },
+        ],
+      });
+      if (!foundStylist) {
+        return res.status(400).json({ message: "User not found." });
+      }
+      res.json(foundStylist);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Error fetching stylist.", err });
     }
-    res.json(foundStylist);
   },
   async login({ body }, res) {
-    const stylist = await Stylist.findOne({
-      $or: [{ name: body.name }, { email: body.email }],
-    });
-    if (!stylist) {
-      return res.status(400).json({ message: "User not found" });
+    try {
+      const stylist = await Stylist.findOne({
+        $or: [{ name: body.name }, { email: body.email }],
+      });
+      if (!stylist) {
+        return res.status(400).json({ message: "User not found" });
+      }
+      const pwcheck = await stylist.isCorrectPassword(body.password);
+      if (!pwcheck) {
+        return res.status(400).json({ message: "Wrong credentials", err });
+      }
+      const token = signToken(stylist);
+      res.json({ token, stylist });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
     }
-    const pwcheck = await stylist.isCorrectPassword(body.password);
-    if (!pwcheck) {
-      return res.status(400).json({ message: "Wrong credentials" });
-    }
-    const token = signToken(stylist);
-    res.json({ token, stylist });
   },
   async updateStylist({ stylist, body }, res) {
     try {
@@ -59,8 +77,8 @@ module.exports = {
       const token = signToken(thisStylist);
       res.json({ message: "Stylist updated!", token, thisStylist });
     } catch (err) {
-      console.log(err);
-      return res.status(400).json(err);
+      console.error(err);
+      return res.status(500).json({ message: "Error updating stylist", err });
     }
   },
   async deleteStylist({ stylist, params }, res) {
@@ -75,7 +93,7 @@ module.exports = {
       res.json({ message: "User deleted", deleted });
     } catch (err) {
       console.log(err);
-      return res.status(500).json(err);
+      return res.status(500).json({ message: "Error deleting stylist", err });
     }
   },
 };
