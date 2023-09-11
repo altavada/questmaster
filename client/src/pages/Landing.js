@@ -9,7 +9,7 @@ export default function Landing() {
     <>
       <h1>Book your appointment with (business) today!</h1>
       <div className="center" style={styles}>
-        <Button text="Get Started" />
+        <Button text="Get Started" route="/team-select" />
       </div>
     </>
   );
