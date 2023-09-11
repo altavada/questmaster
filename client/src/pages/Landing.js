@@ -1,14 +1,10 @@
 import Button from "../components/Button";
 
-const styles = {
-  marginTop: "50px",
-};
-
 export default function Landing() {
   return (
     <>
       <h1>Book your appointment with (business) today!</h1>
-      <div className="center" style={styles}>
+      <div className="center body-container">
         <Button text="Get Started" route="/team-select" />
       </div>
     </>

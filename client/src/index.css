@@ -33,6 +33,7 @@ h1 {
 
 h2 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .powered-by {
@@ -86,4 +87,23 @@ h2 {
 
 .center {
     text-align: center;
+}
+
+.work-box {
+    background-color: var(--yellow);
+    margin: auto;
+    width: 375px;
+    height: 325px;
+    border-radius: 35px;
+    padding: 35px;
+}
+
+.body-container {
+    margin-top: 50px;
+}
+
+.wb-content {
+    color: var(--magenta);
+    margin: 20px 0px;
+    font-size: large;
 }
