@@ -1,11 +1,14 @@
 :root {
     --blue: #68c7ff;
     --yellow: #ffd700;
+    --a-yellow: #d4b500;
     --magenta: #cb0b66;
+    --a-magenta: #9c0a4e;
 }
 
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
 }
 
 body {
@@ -14,6 +17,18 @@ body {
 
 header {
     height: 75px;
+}
+
+h1 {
+    text-align: center;
+    margin: 100px 10px 10px 10px;
+    font-size: 40pt;
+}
+
+@media screen and (max-width: 377px) {
+    h1 {
+        font-size: 32pt;
+    }
 }
 
 .powered-by {
@@ -43,4 +58,27 @@ header {
     position: relative;
     top: -40px;
     left: 190px;
+}
+
+.button {
+    background-color: var(--magenta);
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+    color: var(--yellow);
+    font-size: larger;
+    border-radius: 10px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.button:active {
+    background-color: var(--a-magenta);
+    color: var(--a-yellow);
+}
+
+.center {
+    text-align: center;
 }

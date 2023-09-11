@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
+import Landing from "./pages/Landing";
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       <>
         <Header />
         <Routes>
-          {/* <Route path="/" element={<Booking />} /> */}
+          <Route path="/" element={<Landing />} />
         </Routes>
       </>
     </Router>
