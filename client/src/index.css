@@ -4,6 +4,7 @@
     --a-yellow: #d4b500;
     --magenta: #cb0b66;
     --a-magenta: #9c0a4e;
+    --shadow: rgba(107, 107, 107, 0.5);
 }
 
 * {
@@ -19,10 +20,28 @@ header {
     height: 75px;
 }
 
+button {
+    /* Reset all default styles */
+    border: none;
+    margin: 0;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    text-decoration: none;
+}
+
 h1 {
     text-align: center;
     margin: 100px 10px 10px 10px;
     font-size: 40pt;
+    pointer-events: none;
+}
+
+form, select, option {
+    color: black;
 }
 
 @media screen and (max-width: 377px) {
@@ -34,24 +53,33 @@ h1 {
 h2 {
     text-align: center;
     margin-bottom: 20px;
+    pointer-events: none;
 }
 
 .powered-by {
     height: 60px;
     width: 300px;
-    background-color: var(--yellow);
+    background-color: black;
     float: right;
     border-bottom-left-radius: 60px;
 }
 
 .powered-by p {
-    margin: 3px 10px -6px 50px;
-    color: var(--magenta);
+    margin: 3px 10px -6px 55px;
+    color: white;
+    font-size: small;
 }
 
 #brand-name {
-    font-size: larger;
+    display: inline-block;
+    position: relative;
+    top: -13px;
+    left: -7px;
+    font-size: 18pt;
     font-weight: bold;
+    background: linear-gradient(to right,var(--magenta), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 #logo-plate {
@@ -61,15 +89,15 @@ h2 {
     background-color: var(--magenta);
     border-radius: 20px;
     position: relative;
-    top: -40px;
-    left: 190px;
+    top: -8px;
+    left: 15px;
 }
 
 .button {
     background-color: var(--magenta);
     display: inline-block;
     text-align: center;
-    padding: 10px;
+    padding: 10px 15px;
     color: var(--yellow);
     font-size: larger;
     border-radius: 10px;
@@ -78,11 +106,13 @@ h2 {
 
 .button:hover {
     cursor: pointer;
+    box-shadow: 5px 5px 5px var(--shadow);
 }
 
 .button:active {
     background-color: var(--a-magenta);
     color: var(--a-yellow);
+    box-shadow: 3px 3px 3px var(--shadow);
 }
 
 .center {
@@ -94,16 +124,24 @@ h2 {
     margin: auto;
     width: 375px;
     height: 325px;
+    padding: 25px 0px;
     border-radius: 35px;
-    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 15px 15px 15px var(--shadow);
 }
 
 .body-container {
     margin-top: 50px;
 }
 
+/* section block */
 .wb-content {
     color: var(--magenta);
-    margin: 20px 0px;
+    padding: 10px 35px;
     font-size: large;
+}
+
+.fill-box {
+    flex-grow: 1;
 }

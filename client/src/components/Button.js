@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 
-export default function Button({ text, route, styling }) {
+export default function Button({ text, route, styling, type }) {
   return (
-    <Link className="button" style={styling} to={route}>
-      {text}
+    <Link to={route}>
+      <button type={type || "button"} className="button" style={styling}>
+        {text}
+      </button>
     </Link>
   );
 }
