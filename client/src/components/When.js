@@ -19,11 +19,11 @@ export default function When({ sendTime, goBack }) {
   return (
     <>
       <form className="center" onSubmit={handleSubmit}>
-        <label className="wb-content">Pick a date:</label>
+        <label className="wb-content bold">Pick a date:</label>
         <div className="wb-content">
           <Dropdown name="date" />
         </div>
-        <label className="wb-content">Pick a time:</label>
+        <label className="wb-content bold">Pick a time:</label>
         <div className="wb-content">
           <Dropdown name="time" />
         </div>

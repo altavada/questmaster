@@ -142,6 +142,10 @@ h2 {
     font-size: large;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .fill-box {
     flex-grow: 1;
 }
@@ -154,8 +158,4 @@ h2 {
 
 .flex {
     display: flex;
-}
-
-label {
-    font-weight: bold;
 }
