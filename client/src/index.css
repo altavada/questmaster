@@ -145,3 +145,9 @@ h2 {
 .fill-box {
     flex-grow: 1;
 }
+
+.dropdown {
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+}

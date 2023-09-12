@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Landing from "./pages/Landing";
-import Who from "./pages/Who";
+import Booking from "./pages/Booking";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/team-select" element={<Who />} />
+          <Route path="/team-select" element={<Booking />} />
         </Routes>
       </>
     </Router>
