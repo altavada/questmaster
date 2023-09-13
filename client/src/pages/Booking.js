@@ -19,6 +19,7 @@ export default function Booking() {
         setStage("when");
     }
   };
+
   const revertStage = (data) => {
     setStage(data);
   };

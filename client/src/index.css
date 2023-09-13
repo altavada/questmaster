@@ -62,6 +62,7 @@ h2 {
     background-color: black;
     float: right;
     border-bottom-left-radius: 60px;
+    pointer-events: none;
 }
 
 .powered-by p {

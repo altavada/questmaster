@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { getStylists } from "../utils/api";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 
@@ -14,6 +16,28 @@ const padding = {
 };
 
 export default function Who({ sendStylistId }) {
+  const [allStylists, setAllStylists] = useState([]);
+  useEffect(() => {
+    const getStylistData = async () => {
+      try {
+        const response = await getStylists();
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
+        console.log(response);
+        console.log(response.text());
+        try {
+          const stylists = await response.json();
+          console.log(stylists);
+        } catch (err) {
+          console.error("JSON error:", err);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getStylistData();
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
