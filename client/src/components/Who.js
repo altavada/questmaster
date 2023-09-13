@@ -24,14 +24,11 @@ export default function Who({ sendStylistId }) {
         if (!response.ok) {
           throw new Error("Something went wrong");
         }
-        console.log(response);
-        // console.log(response.text());
-        try {
-          const stylists = await response.json();
-          console.log(stylists);
-        } catch (err) {
-          console.error("JSON error:", err);
-        }
+        const stylists = await response.json();
+        const vitalData = stylists.map((stylist) => {
+          return { title: stylist.name, value: stylist._id };
+        });
+        setAllStylists(vitalData);
       } catch (err) {
         console.error(err);
       }
@@ -55,7 +52,7 @@ export default function Who({ sendStylistId }) {
       </div>
       <form className="center" onSubmit={handleSubmit}>
         <div className="wb-content">
-          <Dropdown name="stylist" />
+          <Dropdown name="stylist" options={allStylists} />
         </div>
         <div className="wb-content" style={padding}>
           <Button type="button" styling={spacer} text="Go Back" route="/" />

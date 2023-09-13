@@ -1,9 +1,19 @@
+import { useEffect } from "react";
+
 export default function Dropdown({ name, options }) {
+  useEffect(() => {
+    console.log("Options", options);
+  });
   return (
     <select className="dropdown" name={name}>
-      <option value="option1">Option 1</option>
-      <option value="option2">Option 2</option>
-      <option value="option3">Option 3</option>
+        <option value="" disabled selected>(pick one)</option>
+      {options.map((opt, i) => {
+        return (
+          <option value={opt.value} key={i}>
+            {opt.title}
+          </option>
+        );
+      })}
     </select>
   );
 }

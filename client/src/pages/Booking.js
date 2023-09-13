@@ -19,7 +19,6 @@ export default function Booking() {
         setStage("when");
     }
   };
-
   const revertStage = (data) => {
     setStage(data);
   };
@@ -29,7 +28,7 @@ export default function Booking() {
     case "when":
       prompt = "When would you like to come see us?";
       whichContent = (
-        <When sendTime={fetchFromComponent} goBack={revertStage} />
+        <When who={inputStylist} sendTime={fetchFromComponent} goBack={revertStage} />
       );
       break;
     default:
