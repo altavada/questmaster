@@ -64,7 +64,7 @@ module.exports = {
       res.status(500).json({ message: "Internal server error", err });
     }
   },
-  // "stylist" data from authMiddleware, must be admin or currently-assigned stylist
+  // "user" data from jwt via authMiddleware, must be admin
   // localhost:3001/api/appointments/update
   // request must contain body.id (appointment ID)
   async updateAppt({ user, body }, res) {
@@ -89,6 +89,8 @@ module.exports = {
       res.status(500).json({ message: "Internal server error", err });
     }
   },
+  // admin authentication
+  // localhost:3001/api/appointments/:id
   async cancelAppt({ user, params }, res) {
     try {
       if (!user.isAdmin) {
