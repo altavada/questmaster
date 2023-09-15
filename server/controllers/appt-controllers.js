@@ -24,7 +24,7 @@ module.exports = {
   async getAppts(req, res) {
     try {
       const appts = await Appointment.find();
-      if (!appts) {
+      if (!appts || appts.length == 0) {
         return res.status(400).json({ message: "No appointments found" });
       }
       res.json(appts);

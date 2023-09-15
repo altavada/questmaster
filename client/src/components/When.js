@@ -14,7 +14,7 @@ const options = [
 export default function When({ who, sendTime, goBack }) {
   useEffect(() => {
     console.log("Selected stylist ID:", who);
-  });
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
