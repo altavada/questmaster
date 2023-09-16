@@ -5,3 +5,11 @@ export const getStylists = () => {
     },
   });
 };
+
+export const getStylistAppointments = (stylist) => {
+  return fetch(`/api/appointments/stylist/${stylist}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};

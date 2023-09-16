@@ -2,12 +2,8 @@ const { Schema, model, models } = require("mongoose");
 const Stylist = require("./Stylist");
 
 const apptSchema = new Schema({
-  date: {
-    type: String,
-    required: true,
-  },
   time: {
-    type: String,
+    type: Number,
     required: true,
   },
   stylist: {
@@ -25,6 +21,11 @@ const apptSchema = new Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    isEmail: true,
+    required: true,
+  },
   service: {
     type: String,
     required: true,
@@ -36,7 +37,6 @@ apptSchema.pre("save", async function (next) {
   const appt = this;
   const isDoubleBooked = await models.Appointment.exists({
     _id: { $ne: appt._id },
-    date: appt.date,
     time: appt.time,
     stylist: appt.stylist,
   });
