@@ -1,0 +1,3 @@
+# QuestMaster
+
+This project is currently in development. It is an accessible mobile-friendly appointment-booking application allowing customers to book appointments with particular staff members, as is common at salons, barber shops, spas, and similar establishments. It also houses profile data for staff members, allows staff members to view their appointment schedules and edit their personal profiles, and offers a protected admins-only dashboard enabling advanced settings options and full managmenet of appointments and staff accounts. The implementation of these features is ongoing; stay tuned for more info!
