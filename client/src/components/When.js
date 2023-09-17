@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
-import { getStylistAppointments } from "../utils/api";
+// import { getStylistAppointments } from "../utils/api";
+import { getAppointmentData } from "../utils/aux";
 
 const spacer = {
   margin: "0px 10px",
@@ -15,19 +16,7 @@ const options = [
 export default function When({ who, sendTime, goBack }) {
   useEffect(() => {
     console.log("Selected stylist ID:", who);
-    const getAppointmentData = async () => {
-      try {
-        const response = await getStylistAppointments(who);
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
-        const appointments = await response.json();
-        console.log(appointments);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getAppointmentData();
+    getAppointmentData(who);
   }, [who]);
   const [isDateSelected, setIsDateSelected] = useState(false);
   const handleSubmit = (e) => {
@@ -46,13 +35,13 @@ export default function When({ who, sendTime, goBack }) {
   return (
     <>
       <form className="center" onSubmit={handleSubmit}>
-        <label className="wb-content bold">Pick a date:</label>
+        <label className="wb-content">Pick a date</label>
         <div className="wb-content">
           <Dropdown name="date" options={options} onChange={handleDateSelect} />
         </div>
         {isDateSelected ? (
           <>
-            <label className="wb-content bold">Pick a time:</label>
+            <label className="wb-content">Pick a time</label>
             <div className="wb-content">
               <Dropdown name="time" options={options} />
             </div>

@@ -26,13 +26,13 @@ export default function Dropdown({ name, options, onChange }) {
       <option value="null" disabled selected>
         (pick one)
       </option>
-      {options.map((opt, i) => {
+      {options ? options.map((opt, i) => {
         return (
           <option value={opt.value} key={i}>
             {opt.title}
           </option>
         );
-      })}
+      }) : null}
     </select>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getStylists } from "../utils/api";
+import { getStylistData } from "../utils/aux";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 
@@ -18,22 +18,7 @@ const padding = {
 export default function Who({ sendStylistId }) {
   const [allStylists, setAllStylists] = useState([]);
   useEffect(() => {
-    const getStylistData = async () => {
-      try {
-        const response = await getStylists();
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
-        const stylists = await response.json();
-        const vitalData = stylists.map((stylist) => {
-          return { title: stylist.name, value: stylist._id };
-        });
-        setAllStylists(vitalData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getStylistData();
+    getStylistData().then((data => setAllStylists(data)));
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,8 +32,8 @@ export default function Who({ sendStylistId }) {
       <div className="center wb-content">
         <Button text="Click here to meet our team!" styling={widen} />
       </div>
-      <div className="center wb-content bold">
-        Or click the dropdown menu to make your choice now:
+      <div className="center wb-content">
+        Or choose a team member from the list below –
       </div>
       <form className="center" onSubmit={handleSubmit}>
         <div className="wb-content">

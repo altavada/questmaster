@@ -1,10 +1,12 @@
 :root {
-    --blue: #68c7ff;
-    --yellow: #ffd700;
-    --a-yellow: #d4b500;
-    --magenta: #cb0b66;
-    --a-magenta: #9c0a4e;
+    --blue: #68f0ff;
+    --yellow: #80ffceaf;
+    --burnt: #80ffce66;
+    --a-yellow: #7de5bdaf;
+    --magenta: #cb0b6585;
+    --a-magenta: #9c0a4e82;
     --shadow: rgba(107, 107, 107, 0.5);
+    --tx-shadow:rgba(107, 107, 107, 0.2);
 }
 
 * {
@@ -19,7 +21,7 @@ html, body {
 }
 
 body {
-    background: linear-gradient(var(--blue), #a368ff);
+    background: linear-gradient(135deg, var(--blue), #ae68ff);
 }
   
 
@@ -42,10 +44,10 @@ button {
 
 h1 {
     text-align: center;
-    display: inline-block;
     margin: 100px 10px 10px 10px;
     font-size: 40pt;
     pointer-events: none;
+    text-shadow: 5px 5px 5px var(--tx-shadow);
 }
 
 form, select, option {
@@ -62,6 +64,7 @@ h2 {
     text-align: center;
     margin-bottom: 20px;
     pointer-events: none;
+    text-shadow: 5px 5px 5px var(--tx-shadow);
 }
 
 .powered-by {
@@ -86,7 +89,7 @@ h2 {
     left: -7px;
     font-size: 18pt;
     font-weight: bold;
-    background: linear-gradient(to right,var(--magenta), var(--yellow));
+    background: linear-gradient(to right,#cb0b65, #ffd700);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -129,7 +132,7 @@ h2 {
 }
 
 .work-box {
-    background-color: var(--yellow);
+    background-color: var(--burnt);
     margin: auto;
     width: 375px;
     height: 325px;
@@ -148,12 +151,6 @@ h2 {
     .dropdown {
         height: 50px;
         font-size: 24px;
-    }
-}
-
-@media screen and (max-width: 361px) {
-    .work-box {
-        height: 405px;
     }
 }
 
@@ -181,6 +178,13 @@ h2 {
     padding: 5px;
     border-radius: 10px;
     text-align: center;
+    color: #68c7ff;
+    background-color: rgba(255, 255, 255, 0.672);
+    border-color: var(--shadow);
+}
+
+.dropdown:hover {
+    box-shadow: 5px 5px 4px var(--tx-shadow);
 }
 
 .dropdown:focus {
@@ -190,3 +194,35 @@ h2 {
 .flex {
     display: flex;
 }
+
+@keyframes fadeOut {
+    0% {
+      opacity: 1; /* Start with full opacity */
+    }
+    100% {
+      opacity: 0; /* End with complete transparency */
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 1.5s forwards;
+    pointer-events: none;
+}
+
+.fade-in-slow {
+    animation: fadeIn 5s forwards;
+}
+
+.fade-in {
+    animation: fadeIn 2.5s forwards;
+}
+  

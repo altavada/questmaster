@@ -4,14 +4,12 @@ import When from "../components/When";
 
 export default function Booking() {
   const [inputStylist, setInputStylist] = useState("");
-  const [inputDate, setInputDate] = useState("");
   const [inputTime, setInputTime] = useState("");
   const [stage, setStage] = useState("who");
   const fetchFromComponent = (data) => {
     console.log(data);
     switch (stage) {
       case "when":
-        setInputDate(data.date);
         setInputTime(data.time);
         break;
       default:
@@ -37,8 +35,8 @@ export default function Booking() {
   }
   return (
     <div className="body-container">
-      <h2>{prompt}</h2>
-      <div className="work-box">{whichContent}</div>
+      <h2 className="fade-in">{prompt}</h2>
+      <div className="work-box fade-in-slow">{whichContent}</div>
     </div>
   );
 }
