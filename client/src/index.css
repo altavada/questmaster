@@ -12,9 +12,16 @@
     color: white;
 }
 
-body {
-    background-color: var(--blue);
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
+
+body {
+    background: linear-gradient(var(--blue), #a368ff);
+}
+  
 
 header {
     height: 75px;
@@ -35,6 +42,7 @@ button {
 
 h1 {
     text-align: center;
+    display: inline-block;
     margin: 100px 10px 10px 10px;
     font-size: 40pt;
     pointer-events: none;
@@ -132,6 +140,23 @@ h2 {
     box-shadow: 15px 15px 15px var(--shadow);
 }
 
+@media screen and (max-width: 415px) {
+    .work-box {
+        width: 90%;
+        height: 375px;
+    }
+    .dropdown {
+        height: 50px;
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 361px) {
+    .work-box {
+        height: 405px;
+    }
+}
+
 .body-container {
     margin-top: 50px;
 }
@@ -155,6 +180,7 @@ h2 {
     width: 100%;
     padding: 5px;
     border-radius: 10px;
+    text-align: center;
 }
 
 .dropdown:focus {

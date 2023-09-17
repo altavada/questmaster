@@ -11,7 +11,7 @@ export default function Landing() {
       <div className="center body-container">
         <Button
           text="Get Started"
-          route="/team-select"
+          route="/book"
           styling={buttonStyles}
         />
       </div>
