@@ -18,7 +18,11 @@ export default function When({ who, sendTime, goBack }) {
     console.log("Selected stylist ID:", who);
     getAppointmentData(who);
   }, [who]);
+
   const [isDateSelected, setIsDateSelected] = useState(false);
+  const [buttonFade, setButtonFade] = useState(false);
+  const [isTimeSelected, setIsTimeSelected] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -30,7 +34,29 @@ export default function When({ who, sendTime, goBack }) {
     goBack("who");
   };
   const handleDateSelect = () => {
-    if (isDateSelected === false) setIsDateSelected(true);
+    if (!isDateSelected) {
+      setButtonFade(true);
+      setTimeout(() => {
+        setButtonFade(false);
+        setIsDateSelected(true);
+      }, 500);
+    } else if (isTimeSelected) {
+      setButtonFade(true);
+      setTimeout(() => {
+        setButtonFade(false);
+        setIsTimeSelected(false);
+      }, 500)
+    }
+  };
+
+  const handleTimeSelect = () => {
+    if (isTimeSelected === false) {
+      setButtonFade(true);
+      setTimeout(() => {
+        setButtonFade(false);
+        setIsTimeSelected(true);
+      }, 500);
+    }
   };
   return (
     <>
@@ -40,21 +66,39 @@ export default function When({ who, sendTime, goBack }) {
           <Dropdown name="date" options={options} onChange={handleDateSelect} />
         </div>
         {isDateSelected ? (
-          <>
+          <div className="fade-in">
             <label className="wb-content">Pick a time</label>
             <div className="wb-content">
-              <Dropdown name="time" options={options} />
+              <Dropdown
+                name="time"
+                options={options}
+                onChange={handleTimeSelect}
+              />
             </div>
-          </>
+          </div>
         ) : null}
-        <div className="wb-content">
+        <div
+          className={
+            isDateSelected
+              ? buttonFade
+                ? "wb-content fade-out-quick"
+                : isTimeSelected
+                ? "wb-content fade-in"
+                : "wb-content fade-in-slow"
+              : buttonFade
+              ? "wb-content fade-out-quicker"
+              : "wb-content"
+          }
+        >
           <Button
             type="button"
             styling={spacer}
             text="Go Back"
             onClick={handleClick}
           />
-          {isDateSelected ? <Button type="submit" text="Continue" /> : null}
+          {isTimeSelected && isDateSelected ? (
+            <Button type="submit" text="Continue" />
+          ) : null}
         </div>
       </form>
     </>

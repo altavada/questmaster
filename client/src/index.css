@@ -7,11 +7,12 @@
     --a-magenta: #9c0a4e82;
     --shadow: rgba(107, 107, 107, 0.5);
     --tx-shadow:rgba(107, 107, 107, 0.2);
+    --transition: 1s;
 }
 
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;
+    color: rgba(255, 255, 255, 0.75);
 }
 
 html, body {
@@ -155,7 +156,7 @@ h2 {
 }
 
 .body-container {
-    margin-top: 50px;
+    margin-top: 100px;
 }
 
 /* section block */
@@ -213,16 +214,29 @@ h2 {
     }
 }
 
+.fade-out-quick {
+    animation: fadeOut var(--transition) forwards;
+    pointer-events: none;
+}
+
+.fade-out-quicker {
+    animation: fadeOut 0.5s forwards;
+    pointer-events: none;
+}
+
 .fade-out {
-    animation: fadeOut 1.5s forwards;
+    animation: fadeOut 2s forwards;
     pointer-events: none;
 }
 
 .fade-in-slow {
-    animation: fadeIn 5s forwards;
+    animation: fadeIn 4.5s forwards;
 }
 
 .fade-in {
     animation: fadeIn 2.5s forwards;
 }
-  
+
+.fade-in-quick {
+    animation: fadeIn var(--transition) forwards;
+}

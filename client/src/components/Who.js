@@ -15,11 +15,15 @@ const padding = {
   marginTop: "3px",
 };
 
-export default function Who({ sendStylistId }) {
+export default function Who({ sendStylistId, handleReturn }) {
   const [allStylists, setAllStylists] = useState([]);
+  const [isSelectionMade, setIsSelectionMade] = useState(false);
+  const [fade, setFade] = useState(false);
+
   useEffect(() => {
-    getStylistData().then((data => setAllStylists(data)));
+    getStylistData().then((data) => setAllStylists(data));
   }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -27,21 +31,41 @@ export default function Who({ sendStylistId }) {
     const formJson = Object.fromEntries(formData.entries());
     sendStylistId(formJson.stylist);
   };
+
+  const handleSelect = () => {
+    if (!isSelectionMade) {
+      setFade(true);
+      setTimeout(() => {
+        setIsSelectionMade(true);
+        setFade(false);
+      }, 400);
+    }
+  };
+
   return (
     <>
       <div className="center wb-content">
         <Button text="Click here to meet our team!" styling={widen} />
       </div>
       <div className="center wb-content">
-        Or choose a team member from the list below –
+        Or choose a team member now from the list below –
       </div>
       <form className="center" onSubmit={handleSubmit}>
         <div className="wb-content">
-          <Dropdown name="stylist" options={allStylists} />
+          <Dropdown
+            name="stylist"
+            options={allStylists}
+            onChange={handleSelect}
+          />
         </div>
-        <div className="wb-content" style={padding}>
-          <Button type="button" styling={spacer} text="Go Back" route="/" />
-          <Button type="submit" text="Continue" />
+        <div className={fade ? "wb-content fade-out-quicker" : "wb-content fade-in-quick"} style={padding}>
+          <Button
+            type="button"
+            styling={spacer}
+            text="Go Back"
+            onClick={handleReturn}
+          />
+          {isSelectionMade && <Button type="submit" text="Continue" />}
         </div>
       </form>
     </>
