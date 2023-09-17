@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getStylists } from "../utils/api";
+import { getStylistData } from "../utils/aux";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 
@@ -15,29 +15,15 @@ const padding = {
   marginTop: "3px",
 };
 
-export default function Who({ sendStylistId }) {
+export default function Who({ sendStylistId, handleReturn }) {
   const [allStylists, setAllStylists] = useState([]);
+  const [isSelectionMade, setIsSelectionMade] = useState(false);
+  const [fade, setFade] = useState(false);
+
   useEffect(() => {
-    const getStylistData = async () => {
-      try {
-        const response = await getStylists();
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
-        console.log(response);
-        console.log(response.text());
-        try {
-          const stylists = await response.json();
-          console.log(stylists);
-        } catch (err) {
-          console.error("JSON error:", err);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getStylistData();
+    getStylistData().then((data) => setAllStylists(data));
   }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -45,21 +31,41 @@ export default function Who({ sendStylistId }) {
     const formJson = Object.fromEntries(formData.entries());
     sendStylistId(formJson.stylist);
   };
+
+  const handleSelect = () => {
+    if (!isSelectionMade) {
+      setFade(true);
+      setTimeout(() => {
+        setIsSelectionMade(true);
+        setFade(false);
+      }, 400);
+    }
+  };
+
   return (
     <>
       <div className="center wb-content">
         <Button text="Click here to meet our team!" styling={widen} />
       </div>
-      <div className="center wb-content bold">
-        Or click the dropdown menu to make your choice now:
+      <div className="center wb-content">
+        Or choose a team member now from the list below –
       </div>
       <form className="center" onSubmit={handleSubmit}>
         <div className="wb-content">
-          <Dropdown name="stylist" />
+          <Dropdown
+            name="stylist"
+            options={allStylists}
+            onChange={handleSelect}
+          />
         </div>
-        <div className="wb-content" style={padding}>
-          <Button type="button" styling={spacer} text="Go Back" route="/" />
-          <Button type="submit" text="Continue" />
+        <div className={fade ? "wb-content fade-out-quicker" : "wb-content fade-in-quick"} style={padding}>
+          <Button
+            type="button"
+            styling={spacer}
+            text="Go Back"
+            onClick={handleReturn}
+          />
+          {isSelectionMade && <Button type="submit" text="Continue" />}
         </div>
       </form>
     </>

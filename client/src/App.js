@@ -11,7 +11,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/team-select" element={<Booking />} />
+          <Route path="/book" element={<Booking />} />
         </Routes>
       </>
     </Router>

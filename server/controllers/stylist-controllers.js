@@ -23,7 +23,7 @@ module.exports = {
       if (!stylists) {
         return res.status(400).json({ message: "No stylists found" });
       }
-      res.json(stylists);
+      res.send(stylists).status(200);
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Error fetching stylists.", err });
