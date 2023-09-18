@@ -44,6 +44,7 @@ const stylistSchema = new Schema({
   ],
 });
 
+// middleware to hash password when created/modified
 stylistSchema.pre("save", function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
@@ -52,6 +53,7 @@ stylistSchema.pre("save", function (next) {
   next();
 });
 
+// middleware to validate admin key and set admin priveleges accordingly
 stylistSchema.pre("save", function (next) {
   if (this.isNew || this.isModified("adminKey")) {
     if (this.adminKey === process.env.ADMIN_KEY) {
@@ -64,6 +66,7 @@ stylistSchema.pre("save", function (next) {
   next();
 });
 
+// validates password entry with encrypted value
 stylistSchema.methods.isCorrectPassword = function (password) {
   return compareSync(password, this.password);
 };
