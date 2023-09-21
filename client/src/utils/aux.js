@@ -24,7 +24,7 @@ export async function getAppointmentData(who) {
       throw new Error("Something went wrong");
     }
     const appointments = await response.json();
-    console.log(appointments);
+    return appointments.map((appt) => appt.time);
   } catch (err) {
     console.error(err);
   }
@@ -40,9 +40,8 @@ export function parseAvailableBlocks(stylistAppointments) {
     "Friday",
     "Saturday",
   ];
-  let now = new Date();
-  let onDate = new Date(now);
-  onDate.setDate(now.getDate() + 1);
+  let onDate = new Date();
+  onDate.setDate(onDate.getDate() + 1);
   let openBlocks = [];
   for (let i = 0; i < bookingPrefs.bookingWindow; i++) {
     let dayOfWeek = onDate.getDay();
@@ -76,6 +75,5 @@ export function parseAvailableBlocks(stylistAppointments) {
     }
     onDate.setDate(onDate.getDate() + 1);
   }
-  console.log(openBlocks);
   return openBlocks;
 }

@@ -1,6 +1,6 @@
 export const bookingPrefs = {
   timeZone: "America/New_York",
-  bookingWindow: 7,
+  bookingWindow: 30,
   dailyHours: {
     0: {
       isOpen: false,

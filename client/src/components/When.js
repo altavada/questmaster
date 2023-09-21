@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
-// import { getStylistAppointments } from "../utils/api";
 import { getAppointmentData } from "../utils/aux";
+import { parseAvailableBlocks } from "../utils/aux";
 
 const spacer = {
   margin: "0px 10px",
@@ -14,43 +14,65 @@ const options = [
 ];
 
 export default function When({ who, sendTime, goBack }) {
-  useEffect(() => {
-    console.log("Selected stylist ID:", who);
-    getAppointmentData(who);
-  }, [who]);
-
   const [isDateSelected, setIsDateSelected] = useState(false);
   const [buttonFade, setButtonFade] = useState(false);
   const [isTimeSelected, setIsTimeSelected] = useState(false);
+  const [blocking, setBlocking] = useState([]);
+  const [dateBlocking, setDateBlocking] = useState([]);
+  const [timeBlocking, setTimeBlocking] = useState([]);
+  const [onBlock, setOnBlock] = useState("null");
+
+  useEffect(() => {
+    const fetchAndParse = async () => {
+      let appts = await getAppointmentData(who);
+      let blockData = parseAvailableBlocks(appts);
+      setBlocking(blockData);
+      setDateBlocking(
+        blockData.map((block) => {
+          return { title: block.dateString, value: block.date };
+        })
+      );
+    };
+    fetchAndParse();
+  }, [who]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    sendTime(formJson);
+    const UTCtimestamp = new Date(
+      `${formJson.date} ${formJson.time}`
+    ).getTime();
+    sendTime(UTCtimestamp);
   };
+
   const handleClick = () => {
     goBack("who");
   };
-  const handleDateSelect = () => {
-    if (!isDateSelected) {
+
+  const handleDateSelect = (e) => {
+    setOnBlock("null");
+    let date = e.target.value;
+    setTimeBlocking(
+      blocking
+        .find((obj) => obj.date === date)
+        .openings.map((timestamp) => {
+          return { title: timestamp, value: timestamp };
+        })
+    );
+    if (!isDateSelected || (isDateSelected && isTimeSelected)) {
       setButtonFade(true);
       setTimeout(() => {
         setButtonFade(false);
-        setIsDateSelected(true);
+        isDateSelected ? setIsTimeSelected(false) : setIsDateSelected(true);
       }, 500);
-    } else if (isTimeSelected) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        setIsTimeSelected(false);
-      }, 500)
     }
   };
 
-  const handleTimeSelect = () => {
-    if (isTimeSelected === false) {
+  const handleTimeSelect = (e) => {
+    setOnBlock(e.target.value);
+    if (!isTimeSelected) {
       setButtonFade(true);
       setTimeout(() => {
         setButtonFade(false);
@@ -58,12 +80,17 @@ export default function When({ who, sendTime, goBack }) {
       }, 500);
     }
   };
+
   return (
     <>
       <form className="center" onSubmit={handleSubmit}>
         <label className="wb-content">Pick a date</label>
         <div className="wb-content">
-          <Dropdown name="date" options={options} onChange={handleDateSelect} />
+          <Dropdown
+            name="date"
+            options={dateBlocking}
+            onChange={handleDateSelect}
+          />
         </div>
         {isDateSelected ? (
           <div className="fade-in">
@@ -71,8 +98,9 @@ export default function When({ who, sendTime, goBack }) {
             <div className="wb-content">
               <Dropdown
                 name="time"
-                options={options}
+                options={timeBlocking}
                 onChange={handleTimeSelect}
+                selectedValue={onBlock}
               />
             </div>
           </div>
