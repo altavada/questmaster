@@ -10,11 +10,16 @@ export default function Booking() {
   const [stage, setStage] = useState("who");
   const [fade, setFade] = useState(false);
 
-  const fetchFromComponent = (data) => {
-    console.log(data);
+  const getFromComponent = (data) => {
+    console.log('Component data:', data);
     switch (stage) {
       case "when":
-        setInputTime(data.time);
+        setFade(true);
+        setInputTime(data);
+        setTimeout(() => {
+          setStage("what");
+          setFade(false);
+        }, transitionTime);
         break;
       default:
         setFade(true);
@@ -51,7 +56,7 @@ export default function Booking() {
       whichContent = (
         <When
           who={inputStylist}
-          sendTime={fetchFromComponent}
+          sendTime={getFromComponent}
           goBack={revertStage}
         />
       );
@@ -59,7 +64,7 @@ export default function Booking() {
     default:
       prompt = "Which team member would you like to book with?";
       whichContent = (
-        <Who sendStylistId={fetchFromComponent} handleReturn={backToHome} />
+        <Who sendStylistId={getFromComponent} handleReturn={backToHome} />
       );
   }
 

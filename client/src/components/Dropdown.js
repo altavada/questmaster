@@ -4,19 +4,18 @@ const warning = {
   borderColor: "red",
 };
 
-export default function Dropdown({ name, options, onChange }) {
+export default function Dropdown({ name, options, onChange, selectedValue }) {
   useEffect(() => {
-    console.log(`Options for ${name}`, options);
   }, [options]);
   const [blurWarning, setBlurWarning] = useState(false);
   const handleBlur = (event) => {
-    console.log(event.target.value);
     if (event.target.value.trim() === "null") {
       setBlurWarning(true);
     }
   };
   return (
     <select
+    value={selectedValue}
       className="dropdown"
       name={name}
       onChange={onChange}

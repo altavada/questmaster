@@ -2,13 +2,15 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { useState } from "react";
 
-const buttonStyles = {
+const biggerButton = {
   fontSize: "24pt",
 };
 
 export default function Landing() {
   let navigate = useNavigate();
+
   const [triggerFade, setTriggerFade] = useState(false);
+
   const handleButtonClick = () => {
     setTriggerFade(true);
     setTimeout(() => {
@@ -36,7 +38,7 @@ export default function Landing() {
       >
         <Button
           text="Get Started"
-          styling={buttonStyles}
+          styling={biggerButton}
           onClick={handleButtonClick}
         />
       </div>

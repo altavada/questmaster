@@ -47,6 +47,7 @@ apptSchema.pre("save", async function (next) {
   next();
 });
 
+// middleware to automatically add stylist name to appointment
 apptSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("stylist")) {
     const stylist = await Stylist.findById(this.stylist);

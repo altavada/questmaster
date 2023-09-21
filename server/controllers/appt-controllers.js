@@ -76,11 +76,11 @@ module.exports = {
       if (!appt) {
         return res.status(400).json({ message: "Appointment not found" });
       }
-      appt.date = body.date || appt.date;
       appt.time = body.time || appt.time;
       appt.stylist = body.stylist || appt.stylist;
-      appt.name = body.name || appt.name;
+      appt.customer = body.customer || appt.customer;
       appt.phone = body.phone || appt.phone;
+      appt.email = body.email || appt.email;
       appt.service = body.service || appt.service;
       await appt.save();
       res.json({ message: "Appointment updated!" });
