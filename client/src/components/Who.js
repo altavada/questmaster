@@ -21,7 +21,9 @@ export default function Who({ sendStylistId, handleReturn }) {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    getStylistData().then((data) => setAllStylists(data));
+    getStylistData().then((data) => {
+      setAllStylists(data);
+    });
   }, []);
 
   const handleSubmit = (e) => {
@@ -29,6 +31,7 @@ export default function Who({ sendStylistId, handleReturn }) {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
+    console.log("We save the selected stylist's ID for appointment-creation:", formJson.stylist);
     sendStylistId(formJson.stylist);
   };
 

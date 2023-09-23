@@ -11,13 +11,12 @@ export default function Booking() {
   const [fade, setFade] = useState(false);
 
   const getFromComponent = (data) => {
-    console.log("Component data:", data);
     setFade(true);
     setTimeout(() => {
       switch (onStage) {
         case "when":
           setInputTime(data);
-          setOnStage("what");
+          // setOnStage("what");
           setFade(false);
           break;
         default:

@@ -24,6 +24,9 @@ export default function Dropdown({
       }}
       onBlur={(e) => {
         if (e.target.value.trim() === "null") {
+          console.log(
+            "Element highlighted in red if clicked away from before selection is made. Reverts once a choice is selected."
+          );
           setBlurWarning(true);
         }
       }}
