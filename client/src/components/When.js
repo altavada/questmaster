@@ -8,11 +8,6 @@ const spacer = {
   margin: "0px 10px",
 };
 
-const options = [
-  { title: "Option 1", value: "option1" },
-  { title: "Option 2", value: "option2" },
-];
-
 export default function When({ who, sendTime, goBack }) {
   const [isDateSelected, setIsDateSelected] = useState(false);
   const [buttonFade, setButtonFade] = useState(false);
@@ -47,40 +42,6 @@ export default function When({ who, sendTime, goBack }) {
     sendTime(UTCtimestamp);
   };
 
-  const handleClick = () => {
-    goBack("who");
-  };
-
-  const handleDateSelect = (e) => {
-    setOnBlock("null");
-    let date = e.target.value;
-    setTimeBlocking(
-      blocking
-        .find((obj) => obj.date === date)
-        .openings.map((timestamp) => {
-          return { title: timestamp, value: timestamp };
-        })
-    );
-    if (!isDateSelected || (isDateSelected && isTimeSelected)) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        isDateSelected ? setIsTimeSelected(false) : setIsDateSelected(true);
-      }, 500);
-    }
-  };
-
-  const handleTimeSelect = (e) => {
-    setOnBlock(e.target.value);
-    if (!isTimeSelected) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        setIsTimeSelected(true);
-      }, 500);
-    }
-  };
-
   return (
     <>
       <form className="center" onSubmit={handleSubmit}>
@@ -89,22 +50,49 @@ export default function When({ who, sendTime, goBack }) {
           <Dropdown
             name="date"
             options={dateBlocking}
-            onChange={handleDateSelect}
+            handleChange={(e) => {
+              setOnBlock("null");
+              setTimeBlocking(
+                blocking
+                  .find((obj) => obj.date === e.target.value)
+                  .openings.map((timestamp) => {
+                    return { title: timestamp, value: timestamp };
+                  })
+              );
+              if (!isDateSelected || (isDateSelected && isTimeSelected)) {
+                setButtonFade(true);
+                setTimeout(() => {
+                  setButtonFade(false);
+                  isDateSelected
+                    ? setIsTimeSelected(false)
+                    : setIsDateSelected(true);
+                }, 500);
+              }
+            }}
           />
         </div>
-        {isDateSelected ? (
+        {isDateSelected && (
           <div className="fade-in">
             <label className="wb-content">Pick a time</label>
             <div className="wb-content">
               <Dropdown
                 name="time"
                 options={timeBlocking}
-                onChange={handleTimeSelect}
+                handleChange={(e) => {
+                  setOnBlock(e.target.value);
+                  if (!isTimeSelected) {
+                    setButtonFade(true);
+                    setTimeout(() => {
+                      setButtonFade(false);
+                      setIsTimeSelected(true);
+                    }, 500);
+                  }
+                }}
                 selectedValue={onBlock}
               />
             </div>
           </div>
-        ) : null}
+        )}
         <div
           className={
             isDateSelected
@@ -122,11 +110,11 @@ export default function When({ who, sendTime, goBack }) {
             type="button"
             styling={spacer}
             text="Go Back"
-            onClick={handleClick}
+            onClick={() => goBack("who")}
           />
-          {isTimeSelected && isDateSelected ? (
+          {isTimeSelected && isDateSelected && (
             <Button type="submit" text="Continue" />
-          ) : null}
+          )}
         </div>
       </form>
     </>

@@ -32,16 +32,6 @@ export default function Who({ sendStylistId, handleReturn }) {
     sendStylistId(formJson.stylist);
   };
 
-  const handleSelect = () => {
-    if (!isSelectionMade) {
-      setFade(true);
-      setTimeout(() => {
-        setIsSelectionMade(true);
-        setFade(false);
-      }, 400);
-    }
-  };
-
   return (
     <>
       <div className="center wb-content">
@@ -55,10 +45,23 @@ export default function Who({ sendStylistId, handleReturn }) {
           <Dropdown
             name="stylist"
             options={allStylists}
-            onChange={handleSelect}
+            handleChange={() => {
+              if (!isSelectionMade) {
+                setFade(true);
+                setTimeout(() => {
+                  setIsSelectionMade(true);
+                  setFade(false);
+                }, 400);
+              }
+            }}
           />
         </div>
-        <div className={fade ? "wb-content fade-out-quicker" : "wb-content fade-in-quick"} style={padding}>
+        <div
+          className={
+            fade ? "wb-content fade-out-quicker" : "wb-content fade-in-quick"
+          }
+          style={padding}
+        >
           <Button
             type="button"
             styling={spacer}
