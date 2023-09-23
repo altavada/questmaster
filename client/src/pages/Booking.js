@@ -7,40 +7,37 @@ export default function Booking() {
   const transitionTime = 1000;
   const [inputStylist, setInputStylist] = useState("");
   const [inputTime, setInputTime] = useState("");
-  const [stage, setStage] = useState("who");
+  const [onStage, setOnStage] = useState("who");
   const [fade, setFade] = useState(false);
 
   const getFromComponent = (data) => {
-    console.log('Component data:', data);
-    switch (stage) {
-      case "when":
-        setFade(true);
-        setInputTime(data);
-        setTimeout(() => {
-          setStage("what");
+    console.log("Component data:", data);
+    setFade(true);
+    setTimeout(() => {
+      switch (onStage) {
+        case "when":
+          setInputTime(data);
+          setOnStage("what");
           setFade(false);
-        }, transitionTime);
-        break;
-      default:
-        setFade(true);
-        setInputStylist(data);
-        setTimeout(() => {
-          setStage("when");
+          break;
+        default:
+          setInputStylist(data);
+          setOnStage("when");
           setFade(false);
-        }, transitionTime);
-    }
+      }
+    }, transitionTime);
   };
 
   const revertStage = (data) => {
     setFade(true);
     setTimeout(() => {
-      setStage(data);
+      setOnStage(data);
       setFade(false);
     }, transitionTime);
   };
 
   let navigate = useNavigate();
-  
+
   const backToHome = () => {
     setFade(true);
     setTimeout(() => {
@@ -50,7 +47,7 @@ export default function Booking() {
 
   let prompt;
   let whichContent;
-  switch (stage) {
+  switch (onStage) {
     case "when":
       prompt = "When would you like to come see us?";
       whichContent = (

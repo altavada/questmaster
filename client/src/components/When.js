@@ -9,8 +9,8 @@ const spacer = {
 };
 
 export default function When({ who, sendTime, goBack }) {
-  const [isDateSelected, setIsDateSelected] = useState(false);
   const [buttonFade, setButtonFade] = useState(false);
+  const [isDateSelected, setIsDateSelected] = useState(false);
   const [isTimeSelected, setIsTimeSelected] = useState(false);
   const [blocking, setBlocking] = useState([]);
   const [dateBlocking, setDateBlocking] = useState([]);
@@ -51,7 +51,7 @@ export default function When({ who, sendTime, goBack }) {
             name="date"
             options={dateBlocking}
             handleChange={(e) => {
-              setOnBlock("null");
+              onBlock !== "null" && setOnBlock("null");
               setTimeBlocking(
                 blocking
                   .find((obj) => obj.date === e.target.value)
