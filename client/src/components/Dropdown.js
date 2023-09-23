@@ -11,14 +11,16 @@ export default function Dropdown({
   selectedValue,
 }) {
   const [blurWarning, setBlurWarning] = useState(false);
+  const [onVal, setOnVal] = useState("null");
   return (
     <select
-      value={selectedValue}
+      value={selectedValue || onVal}
       className="dropdown"
       name={name}
       onChange={(e) => {
-        if (blurWarning) setBlurWarning(false);
-        if (handleChange) handleChange(e);
+        !selectedValue && setOnVal(e.target.value);
+        blurWarning && setBlurWarning(false);
+        handleChange && handleChange(e);
       }}
       onBlur={(e) => {
         if (e.target.value.trim() === "null") {
@@ -27,7 +29,7 @@ export default function Dropdown({
       }}
       style={blurWarning ? warning : null}
     >
-      <option value="null" disabled selected>
+      <option value="null" disabled>
         (pick one)
       </option>
       {options &&
