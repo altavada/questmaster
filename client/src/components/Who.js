@@ -21,7 +21,9 @@ export default function Who({ sendStylistId, handleReturn }) {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    getStylistData().then((data) => setAllStylists(data));
+    getStylistData().then((data) => {
+      setAllStylists(data);
+    });
   }, []);
 
   const handleSubmit = (e) => {
@@ -29,17 +31,8 @@ export default function Who({ sendStylistId, handleReturn }) {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
+    console.log("We save the selected stylist's ID for appointment-creation:", formJson.stylist);
     sendStylistId(formJson.stylist);
-  };
-
-  const handleSelect = () => {
-    if (!isSelectionMade) {
-      setFade(true);
-      setTimeout(() => {
-        setIsSelectionMade(true);
-        setFade(false);
-      }, 400);
-    }
   };
 
   return (
@@ -55,10 +48,23 @@ export default function Who({ sendStylistId, handleReturn }) {
           <Dropdown
             name="stylist"
             options={allStylists}
-            onChange={handleSelect}
+            handleChange={() => {
+              if (!isSelectionMade) {
+                setFade(true);
+                setTimeout(() => {
+                  setIsSelectionMade(true);
+                  setFade(false);
+                }, 400);
+              }
+            }}
           />
         </div>
-        <div className={fade ? "wb-content fade-out-quicker" : "wb-content fade-in-quick"} style={padding}>
+        <div
+          className={
+            fade ? "wb-content fade-out-quicker" : "wb-content fade-in-quick"
+          }
+          style={padding}
+        >
           <Button
             type="button"
             styling={spacer}

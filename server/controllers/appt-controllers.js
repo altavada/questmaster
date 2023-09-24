@@ -18,7 +18,7 @@ module.exports = {
       res.json({ message: "Appointment created!", appt });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error", err });
     }
   },
   async getAppts(req, res) {
@@ -30,7 +30,7 @@ module.exports = {
       res.json(appts);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error", err });
     }
   },
   async getOneAppt({ params }, res) {
@@ -42,7 +42,7 @@ module.exports = {
       res.json(appt);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal server error", err });
     }
   },
   async getApptsByStylist({ params }, res) {

@@ -8,14 +8,9 @@ const spacer = {
   margin: "0px 10px",
 };
 
-const options = [
-  { title: "Option 1", value: "option1" },
-  { title: "Option 2", value: "option2" },
-];
-
 export default function When({ who, sendTime, goBack }) {
-  const [isDateSelected, setIsDateSelected] = useState(false);
   const [buttonFade, setButtonFade] = useState(false);
+  const [isDateSelected, setIsDateSelected] = useState(false);
   const [isTimeSelected, setIsTimeSelected] = useState(false);
   const [blocking, setBlocking] = useState([]);
   const [dateBlocking, setDateBlocking] = useState([]);
@@ -25,6 +20,10 @@ export default function When({ who, sendTime, goBack }) {
   useEffect(() => {
     const fetchAndParse = async () => {
       let appts = await getAppointmentData(who);
+      console.log(
+        "Parsed to array of timestamps for stylist's pre-existing appointments:",
+        appts
+      );
       let blockData = parseAvailableBlocks(appts);
       setBlocking(blockData);
       setDateBlocking(
@@ -44,41 +43,14 @@ export default function When({ who, sendTime, goBack }) {
     const UTCtimestamp = new Date(
       `${formJson.date} ${formJson.time}`
     ).getTime();
-    sendTime(UTCtimestamp);
-  };
-
-  const handleClick = () => {
-    goBack("who");
-  };
-
-  const handleDateSelect = (e) => {
-    setOnBlock("null");
-    let date = e.target.value;
-    setTimeBlocking(
-      blocking
-        .find((obj) => obj.date === date)
-        .openings.map((timestamp) => {
-          return { title: timestamp, value: timestamp };
-        })
+    console.log(
+      "UI and logic constraints ensure a customer can only ever choose a valid and complete date/time"
     );
-    if (!isDateSelected || (isDateSelected && isTimeSelected)) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        isDateSelected ? setIsTimeSelected(false) : setIsDateSelected(true);
-      }, 500);
-    }
-  };
-
-  const handleTimeSelect = (e) => {
-    setOnBlock(e.target.value);
-    if (!isTimeSelected) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        setIsTimeSelected(true);
-      }, 500);
-    }
+    console.log(
+      "We save the UTC timestamp of chosen appointment time for appointment creation:",
+      UTCtimestamp
+    );
+    sendTime(UTCtimestamp);
   };
 
   return (
@@ -89,22 +61,56 @@ export default function When({ who, sendTime, goBack }) {
           <Dropdown
             name="date"
             options={dateBlocking}
-            onChange={handleDateSelect}
+            handleChange={(e) => {
+              onBlock !== "null" && setOnBlock("null");
+              onBlock === "null"
+                ? console.log(
+                    "If a date is selected, the time-selection drowdown menu renders and populates with the stylist's openings for that date."
+                  )
+                : console.log(
+                    "If the user re-selects a date, the time-select dropdown re-renders with the new date. If a time was already selected, the dropdown resets to the 'pick one' default option. "
+                  );
+              setTimeBlocking(
+                blocking
+                  .find((obj) => obj.date === e.target.value)
+                  .openings.map((timestamp) => {
+                    return { title: timestamp, value: timestamp };
+                  })
+              );
+              if (!isDateSelected || (isDateSelected && isTimeSelected)) {
+                setButtonFade(true);
+                setTimeout(() => {
+                  setButtonFade(false);
+                  isDateSelected
+                    ? setIsTimeSelected(false)
+                    : setIsDateSelected(true);
+                }, 500);
+              }
+            }}
           />
         </div>
-        {isDateSelected ? (
+        {isDateSelected && (
           <div className="fade-in">
             <label className="wb-content">Pick a time</label>
             <div className="wb-content">
               <Dropdown
                 name="time"
                 options={timeBlocking}
-                onChange={handleTimeSelect}
+                handleChange={(e) => {
+                  setOnBlock(e.target.value);
+                  if (!isTimeSelected) {
+                    setButtonFade(true);
+                    setTimeout(() => {
+                      setButtonFade(false);
+                      setIsTimeSelected(true);
+                    }, 500);
+                  }
+                }}
                 selectedValue={onBlock}
               />
             </div>
           </div>
-        ) : null}
+        )}
         <div
           className={
             isDateSelected
@@ -122,11 +128,11 @@ export default function When({ who, sendTime, goBack }) {
             type="button"
             styling={spacer}
             text="Go Back"
-            onClick={handleClick}
+            onClick={() => goBack("who")}
           />
-          {isTimeSelected && isDateSelected ? (
+          {isTimeSelected && isDateSelected && (
             <Button type="submit" text="Continue" />
-          ) : null}
+          )}
         </div>
       </form>
     </>

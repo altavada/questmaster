@@ -8,15 +8,7 @@ const biggerButton = {
 
 export default function Landing() {
   let navigate = useNavigate();
-
   const [triggerFade, setTriggerFade] = useState(false);
-
-  const handleButtonClick = () => {
-    setTriggerFade(true);
-    setTimeout(() => {
-      navigate("/book");
-    }, 2000);
-  };
 
   return (
     <>
@@ -39,7 +31,12 @@ export default function Landing() {
         <Button
           text="Get Started"
           styling={biggerButton}
-          onClick={handleButtonClick}
+          onClick={() => {
+            setTriggerFade(true);
+            setTimeout(() => {
+              navigate("/book");
+            }, 2000);
+          }}
         />
       </div>
     </>

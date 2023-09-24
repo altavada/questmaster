@@ -1,37 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const warning = {
   borderColor: "red",
 };
 
-export default function Dropdown({ name, options, onChange, selectedValue }) {
-  useEffect(() => {
-  }, [options]);
+export default function Dropdown({
+  name,
+  options,
+  handleChange,
+  selectedValue,
+}) {
   const [blurWarning, setBlurWarning] = useState(false);
-  const handleBlur = (event) => {
-    if (event.target.value.trim() === "null") {
-      setBlurWarning(true);
-    }
-  };
+  const [onVal, setOnVal] = useState("null");
   return (
     <select
-    value={selectedValue}
+      value={selectedValue || onVal}
       className="dropdown"
       name={name}
-      onChange={onChange}
-      onBlur={handleBlur}
+      onChange={(e) => {
+        !selectedValue && setOnVal(e.target.value);
+        blurWarning && setBlurWarning(false);
+        handleChange && handleChange(e);
+      }}
+      onBlur={(e) => {
+        if (e.target.value.trim() === "null") {
+          console.log(
+            "Element highlighted in red if clicked away from before selection is made. Reverts once a choice is selected."
+          );
+          setBlurWarning(true);
+        }
+      }}
       style={blurWarning ? warning : null}
     >
-      <option value="null" disabled selected>
+      <option value="null" disabled>
         (pick one)
       </option>
-      {options ? options.map((opt, i) => {
-        return (
-          <option value={opt.value} key={i}>
-            {opt.title}
-          </option>
-        );
-      }) : null}
+      {options &&
+        options.map((opt, i) => {
+          return (
+            <option value={opt.value} key={i}>
+              {opt.title}
+            </option>
+          );
+        })}
     </select>
   );
 }
