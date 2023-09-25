@@ -29,6 +29,7 @@ WHEN a staff user creates an admin account
 THEN they can create / delete non-admin staff accounts and view/modify/cancel appointments
 WHEN any staff user logs into their account
 THEN they can view their appointments and customize their public profile
+
 Business settings (weekly opening hours, timezone, and booking window) are statically-hosted
 ```
 
@@ -49,6 +50,8 @@ WHEN a client user receives a confirmation email
 THEN they also receive a secure link allowing them to modify their appointment details
 WHEN a staff user views upcoming appointments
 THEN a notifications tab alerts them of newly-booked appointments
+
+Business settings are hosted on server database
 ```
 
 ### Possible Future Development
