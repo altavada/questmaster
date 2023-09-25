@@ -25,7 +25,7 @@ WHEN a client user comes to the public-facing homepage
 THEN they can access a portal to easily book an appointment with a staff user
 WHEN a client user books an appointment 
 THEN they are provided with a detailed confirmation notice
-WHEN a staff user creates an account
+WHEN a staff user creates an admin account
 THEN they can create / delete non-admin staff accounts and view/modify/cancel appointments
 WHEN any staff user logs into their account
 THEN they can view their appointments and customize their public profile
