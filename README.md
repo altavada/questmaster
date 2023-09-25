@@ -6,24 +6,32 @@ This project is currently in development. It is an accessible mobile-friendly ap
 
 ### MVP
 
-Full list of core technologies:
+> **Full list of core technologies:**
+>
+> - Express.js for API routing and architecture
+>
+> - Node.js for server environment
+>
+> - Mongoose ODM for object-document mapping, DB connectivity, > and CRUD operations
+>
+> - MongoDB Atlas for server database
+>
+> - BCrypt for hash encryption
+>
+> - JWT for user sessions
+>
+> - React.js for front-end architecture
+>
+> - React Router for page routing
+>
+> - Cloudinary API for image hosting/upload
 
-- Express.js for API routing and architecture
-- Node.js for server environment
-- Mongoose ODM for object-document mapping, DB connectivity, and CRUD operations
-- MongoDB Atlas for server database
-- BCrypt for hash encryption
-- JWT for user sessions
-- React.js for front-end architecture
-- React Router for page routing
-- Cloudinary API for image hosting/upload
-
-Criteria:
+**Criteria:**
 
 ```md
 WHEN a client user comes to the public-facing homepage
 THEN they can access a portal to easily book an appointment with a staff user
-WHEN a client user books an appointment 
+WHEN a client user books an appointment
 THEN they are provided with a detailed confirmation notice
 WHEN a staff user creates an admin account
 THEN they can create / delete non-admin staff accounts and view/modify/cancel appointments
@@ -35,11 +43,11 @@ Business settings (weekly opening hours, timezone, and booking window) are stati
 
 ### Phase 2
 
-Technology changes:
+> **Technology changes:**
+>
+> - Refactor project with TypeScript and Next.js
 
-  - Refactor project with TypeScript and Next.js
-
-Criteria: 
+**Criteria:**
 
 ```md
 WHEN a staff user with admin privileges logs into their account
@@ -56,6 +64,8 @@ Business settings are hosted on server database
 
 ### Possible Future Development
 
-- Modularize project for implementation in a variety of business models
-- Rebrand upgraded (non-MVP) project (e.g. “QuestMaster+” or “QMAdvanced”)
-- Text message notifications
+> - Modularize project for implementation in a variety of >business models
+>
+> - Rebrand upgraded (non-MVP) project (e.g. “QuestMaster+” or >“QMAdvanced”)
+>
+> - Text message notifications
