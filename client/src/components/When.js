@@ -109,7 +109,7 @@ export default function When({ who, sendTime, goBack }) {
         >
           <Button
             type="button"
-            styling={spacer}
+            // styling={spacer}
             text="Go Back"
             onClick={() => goBack("who")}
           />

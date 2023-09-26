@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Input({ info }) {
+export default function Input({ info, handleChange, name }) {
   const [placeholder, setPlaceholder] = useState(info);
   const [blurWarning, setBlurWarning] = useState(false);
 
@@ -13,7 +13,8 @@ export default function Input({ info }) {
     }
   };
 
-  const handleChange = (e) => {
+  const handleOnChange = (e) => {
+    handleChange(e);
     if (e.target.value.trim()) {
       blurWarning && setBlurWarning(false);
     }
@@ -22,10 +23,11 @@ export default function Input({ info }) {
   return (
     <input
       placeholder={placeholder}
-      onChange={handleChange}
+      onChange={handleOnChange}
       onClick={handleInputClick}
       onBlur={handleBlur}
       style={blurWarning ? { borderColor: "red" } : null}
+      name={name}
     ></input>
   );
 }
