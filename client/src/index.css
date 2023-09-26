@@ -1,5 +1,7 @@
 :root {
     --blue: #68f0ff;
+    --bluetxt: #68c7ff;
+    --fieldbg: rgba(255, 255, 255, 0.672);
     --yellow: #80ffceaf;
     --burnt: #80ffce66;
     --a-yellow: #7de5bdaf;
@@ -53,6 +55,27 @@ h1 {
 
 form, select, option {
     color: black;
+}
+
+label {
+    color: inherit;
+}
+
+input {
+    background-color: var(--fieldbg);
+    border: 1px solid var(--tx-shadow);
+    border-radius: 5px;
+    text-align: center;
+    color: var(--bluetxt);
+    height: 35px;
+}
+
+input:hover {
+    box-shadow: 5px 5px 4px var(--tx-shadow);
+}
+
+input::placeholder {
+    color: var(--tx-shadow);
 }
 
 @media screen and (max-width: 377px) {
@@ -136,7 +159,7 @@ h2 {
     background-color: var(--burnt);
     margin: auto;
     width: 375px;
-    height: 325px;
+    min-height: 328px;
     padding: 25px 0px;
     border-radius: 35px;
     display: flex;
@@ -164,6 +187,9 @@ h2 {
     color: var(--magenta);
     padding: 10px 35px;
     font-size: large;
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .bold {
@@ -179,8 +205,8 @@ h2 {
     padding: 5px;
     border-radius: 10px;
     text-align: center;
-    color: #68c7ff;
-    background-color: rgba(255, 255, 255, 0.672);
+    color: var(--bluetxt);
+    background-color: var(--fieldbg);
     border-color: var(--shadow);
     cursor: pointer;
 }
