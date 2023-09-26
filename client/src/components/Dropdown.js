@@ -1,17 +1,29 @@
-import { useState } from "react";
-
-const warning = {
-  borderColor: "red",
-};
+import { useState, useEffect } from "react";
 
 export default function Dropdown({
   name,
-  options,
+  fetchOptions,
   handleChange,
   selectedValue,
 }) {
   const [blurWarning, setBlurWarning] = useState(false);
   const [onVal, setOnVal] = useState("null");
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const runFetch = async () => {
+      try {
+        const response = await fetchOptions();
+        setOptions(response);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching options:", err);
+      }
+    };
+    runFetch();
+  }, []);
+
   return (
     <select
       value={selectedValue || onVal}
@@ -24,18 +36,15 @@ export default function Dropdown({
       }}
       onBlur={(e) => {
         if (e.target.value.trim() === "null") {
-          console.log(
-            "Element highlighted in red if clicked away from before selection is made. Reverts once a choice is selected."
-          );
           setBlurWarning(true);
         }
       }}
-      style={blurWarning ? warning : null}
+      style={blurWarning ? { borderColor: "red" } : null}
     >
       <option value="null" disabled>
-        (pick one)
+        {loading ? "Loading..." : "(pick one)"}
       </option>
-      {options &&
+      {!loading &&
         options.map((opt, i) => {
           return (
             <option value={opt.value} key={i}>

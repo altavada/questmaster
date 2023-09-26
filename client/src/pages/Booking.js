@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Who from "../components/Who";
 import When from "../components/When";
+import What from "../components/What";
 
 export default function Booking() {
   const transitionTime = 1000;
@@ -10,20 +11,18 @@ export default function Booking() {
   const [onStage, setOnStage] = useState("who");
   const [fade, setFade] = useState(false);
 
-  const getFromComponent = (data) => {
+  const getFromComponent = (data, whichData, toStage) => {
     setFade(true);
     setTimeout(() => {
-      switch (onStage) {
-        case "when":
-          setInputTime(data);
-          // setOnStage("what");
-          setFade(false);
-          break;
+      switch (whichData) {
         default:
           setInputStylist(data);
-          setOnStage("when");
-          setFade(false);
+          break;
+        case "time":
+          setInputTime(data);
       }
+      setOnStage(toStage);
+      setFade(false);
     }, transitionTime);
   };
 
@@ -47,6 +46,18 @@ export default function Booking() {
   let prompt;
   let whichContent;
   switch (onStage) {
+    default:
+      prompt = "Which team member would you like to book with?";
+      whichContent = (
+        <Who sendStylistId={getFromComponent} handleReturn={backToHome} />
+      );
+      break;
+    case "what":
+      prompt = "Tell us about your visit";
+      whichContent = (
+        <What sendDetails={getFromComponent} goBack={revertStage} />
+      );
+      break;
     case "when":
       prompt = "When would you like to come see us?";
       whichContent = (
@@ -55,12 +66,6 @@ export default function Booking() {
           sendTime={getFromComponent}
           goBack={revertStage}
         />
-      );
-      break;
-    default:
-      prompt = "Which team member would you like to book with?";
-      whichContent = (
-        <Who sendStylistId={getFromComponent} handleReturn={backToHome} />
       );
   }
 

@@ -8,17 +8,13 @@ export async function getStylistData() {
       throw new Error("Something went wrong");
     }
     const stylists = await response.json();
-    console.log("Raw stylist JSON data fetched from db:", stylists);
     const vitalData = stylists.map((stylist) => {
       return { title: stylist.name, value: stylist._id };
     });
-    console.log(
-      "Parsed / formatted stylist data for dropdown component:",
-      vitalData
-    );
     return vitalData;
   } catch (err) {
     console.error(err);
+    return new Error(err);
   }
 }
 
@@ -29,10 +25,10 @@ export async function getAppointmentData(who) {
       throw new Error("Something went wrong");
     }
     const appointments = await response.json();
-    console.log("Raw appointmentByStylist JSON fetched from db:", appointments);
     return appointments.map((appt) => appt.time);
   } catch (err) {
     console.error(err);
+    return new Error(err);
   }
 }
 
@@ -81,25 +77,5 @@ export function parseAvailableBlocks(stylistAppointments) {
     }
     onDate.setDate(onDate.getDate() + 1);
   }
-  console.log(
-    "Util function parseAvailableBlocks finds all future appointment openings for stylist within the company's booking window."
-  );
-  console.log(
-    "Accepts array of stylist's appointment times as argument and reads the business settings object to determine valid, open schedule blocks."
-  );
-  console.log(
-    "Business settings object defining opening hours, timezone, and booking window (no. of days from today):",
-    bookingPrefs
-  );
-  console.log(
-    "Returns array of objects necessary to configure customer's date/time choices and retrieve necessary form data."
-  );
-  console.log(
-    "Each object represents a day on which the business is open and stylist is NOT fully-booked."
-  );
-  console.log(
-    "Object keys contain the numeric date, array of timestamps for stylist's open (unbooked) schedule blocks on that date, and formatted date string."
-  );
-  console.log("openBlocks array:", openBlocks);
   return openBlocks;
 }
