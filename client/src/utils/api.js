@@ -13,3 +13,21 @@ export const getStylistAppointments = (stylist) => {
     },
   });
 };
+
+export const getOneStylist = (stylist) => {
+  return fetch(`/api/stylists/${stylist}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const postAppointment = (data) => {
+  return fetch(`/api/appointments/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+};

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Who from "../components/Who";
 import When from "../components/When";
 import What from "../components/What";
+import Review from "../components/Review";
 
 export default function Booking() {
   const transitionTime = 1000;
@@ -75,9 +76,8 @@ export default function Booking() {
       );
       break;
     case "review":
-      console.log(requestData);
       prompt = "Does everything look correct?";
-      whichContent = <div>Content</div>;
+      whichContent = <Review requestData={requestData} goBack={revertStage} />;
   }
 
   return (

@@ -8,7 +8,7 @@ export default function What({ sendDetails, goBack }) {
   const [submitReady, setSubmitReady] = useState(false);
   const [fade, setFade] = useState(false);
   const [inputs, setInputs] = useState({
-    name: "",
+    customer: "",
     phone: "",
     email: "",
     service: "",
@@ -30,8 +30,8 @@ export default function What({ sendDetails, goBack }) {
   };
 
   const checkIfReady = (data) => {
-    const { name, phone, email, service } = data;
-    if (name && phone && email && service) {
+    const { customer, phone, email, service } = data;
+    if (customer && phone && email && service) {
       !submitReady && handleFade();
     } else if (submitReady) {
       handleFade();
@@ -54,7 +54,7 @@ export default function What({ sendDetails, goBack }) {
           <label>Name:</label>
           <Input
             info="Enter name here"
-            name="name"
+            name="customer"
             handleChange={handleInputChange}
           />
         </div>
