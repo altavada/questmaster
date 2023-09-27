@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Who from "../components/Who";
 import When from "../components/When";
@@ -13,25 +13,33 @@ export default function Booking() {
   const [requestData, setRequestData] = useState({});
   const [onStage, setOnStage] = useState("who");
   const [fade, setFade] = useState(false);
+  const [dataFromComponent, setDataFromComponent] = useState(null);
 
-  const getFromComponent = (data, whichData, toStage) => {
+  useEffect(() => {
+    if (!dataFromComponent) return;
+    const { body, type, stage } = dataFromComponent;
+    console.log("Get data effect");
     setFade(true);
     setTimeout(() => {
-      switch (whichData) {
+      switch (type) {
         default:
-          setInputStylist(data);
+          setInputStylist(body);
           break;
         case "time":
-          setInputTime(data);
+          setInputTime(body);
           break;
         case "details":
-          setDetails(data);
-          setRequestData({ ...data, time: inputTime, stylist: inputStylist });
+          setDetails(body);
+          setRequestData({
+            ...body,
+            time: inputTime,
+            stylist: inputStylist,
+          });
       }
-      setOnStage(toStage);
+      setOnStage(stage);
       setFade(false);
     }, transitionTime);
-  };
+  }, [dataFromComponent]);
 
   const revertStage = (data) => {
     setFade(true);
@@ -56,13 +64,13 @@ export default function Booking() {
     default:
       prompt = "Which team member would you like to book with?";
       whichContent = (
-        <Who sendStylistId={getFromComponent} handleReturn={backToHome} />
+        <Who sendStylistId={setDataFromComponent} handleReturn={backToHome} />
       );
       break;
     case "what":
       prompt = "Tell us about your visit";
       whichContent = (
-        <What sendDetails={getFromComponent} goBack={revertStage} />
+        <What sendDetails={setDataFromComponent} goBack={revertStage} />
       );
       break;
     case "when":
@@ -70,7 +78,7 @@ export default function Booking() {
       whichContent = (
         <When
           who={inputStylist}
-          sendTime={getFromComponent}
+          sendTime={setDataFromComponent}
           goBack={revertStage}
         />
       );

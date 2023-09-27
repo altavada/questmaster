@@ -38,7 +38,7 @@ export default function When({ who, sendTime, goBack }) {
     const UTCtimestamp = new Date(
       `${formJson.date} ${formJson.time}`
     ).getTime();
-    sendTime(UTCtimestamp, "time", "what");
+    sendTime({ body: UTCtimestamp, type: "time", stage: "what" });
   };
 
   const handleDateOnChange = (e) => {
