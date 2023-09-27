@@ -1,7 +1,7 @@
 import Dropdown from "./Dropdown";
 import Input from "./Input";
 import Button from "./Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getServices } from "../utils/aux";
 
 export default function What({ sendDetails, goBack }) {
@@ -14,28 +14,26 @@ export default function What({ sendDetails, goBack }) {
     service: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const newInputs = { ...inputs, [name]: value };
-    setInputs(newInputs);
-    checkIfReady(newInputs);
-  };
+  useEffect(() => {
+    const { customer, phone, email, service } = inputs;
+    if (customer && phone && email && service) {
+      !submitReady && setFade(true);
+    } else if (submitReady) {
+      setFade(true);
+    }
+  }, [inputs]);
 
-  const handleFade = () => {
-    setFade(true);
+  useEffect(() => {
+    if (!fade) return;
     setTimeout(() => {
       setSubmitReady(!submitReady);
       setFade(false);
     }, 500);
-  };
+  }, [fade]);
 
-  const checkIfReady = (data) => {
-    const { customer, phone, email, service } = data;
-    if (customer && phone && email && service) {
-      !submitReady && handleFade();
-    } else if (submitReady) {
-      handleFade();
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -43,8 +41,7 @@ export default function What({ sendDetails, goBack }) {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    // console.log(formJson);
-    sendDetails(formJson, "details", "review");
+    sendDetails({ body: formJson, stage: "review" });
   };
 
   return (
