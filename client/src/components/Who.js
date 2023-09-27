@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { getStylistData } from "../utils/aux";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
@@ -16,23 +16,15 @@ const padding = {
 };
 
 export default function Who({ sendStylistId, handleReturn }) {
-  const [allStylists, setAllStylists] = useState([]);
   const [isSelectionMade, setIsSelectionMade] = useState(false);
   const [fade, setFade] = useState(false);
-
-  useEffect(() => {
-    getStylistData().then((data) => {
-      setAllStylists(data);
-    });
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    console.log("We save the selected stylist's ID for appointment-creation:", formJson.stylist);
-    sendStylistId(formJson.stylist);
+    sendStylistId(formJson.stylist, "stylist", "when");
   };
 
   return (
@@ -47,14 +39,14 @@ export default function Who({ sendStylistId, handleReturn }) {
         <div className="wb-content">
           <Dropdown
             name="stylist"
-            options={allStylists}
+            fetchOptions={getStylistData}
             handleChange={() => {
               if (!isSelectionMade) {
                 setFade(true);
                 setTimeout(() => {
                   setIsSelectionMade(true);
                   setFade(false);
-                }, 400);
+                }, 500);
               }
             }}
           />

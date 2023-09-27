@@ -1,38 +1,35 @@
-import { getStylistAppointments, getStylists } from "./api";
+import {
+  getStylistAppointments,
+  getStylists,
+  getOneStylist,
+  postAppointment,
+} from "./api";
 import { bookingPrefs } from "./staticSettings";
 
 export async function getStylistData() {
   try {
     const response = await getStylists();
-    if (!response.ok) {
-      throw new Error("Something went wrong");
-    }
+    if (!response.ok) throw new Error("Something went wrong");
     const stylists = await response.json();
-    console.log("Raw stylist JSON data fetched from db:", stylists);
     const vitalData = stylists.map((stylist) => {
       return { title: stylist.name, value: stylist._id };
     });
-    console.log(
-      "Parsed / formatted stylist data for dropdown component:",
-      vitalData
-    );
     return vitalData;
   } catch (err) {
     console.error(err);
+    return new Error(err);
   }
 }
 
 export async function getAppointmentData(who) {
   try {
     const response = await getStylistAppointments(who);
-    if (!response.ok) {
-      throw new Error("Something went wrong");
-    }
+    if (!response.ok) throw new Error("Something went wrong");
     const appointments = await response.json();
-    console.log("Raw appointmentByStylist JSON fetched from db:", appointments);
     return appointments.map((appt) => appt.time);
   } catch (err) {
     console.error(err);
+    return new Error(err);
   }
 }
 
@@ -81,25 +78,51 @@ export function parseAvailableBlocks(stylistAppointments) {
     }
     onDate.setDate(onDate.getDate() + 1);
   }
-  console.log(
-    "Util function parseAvailableBlocks finds all future appointment openings for stylist within the company's booking window."
-  );
-  console.log(
-    "Accepts array of stylist's appointment times as argument and reads the business settings object to determine valid, open schedule blocks."
-  );
-  console.log(
-    "Business settings object defining opening hours, timezone, and booking window (no. of days from today):",
-    bookingPrefs
-  );
-  console.log(
-    "Returns array of objects necessary to configure customer's date/time choices and retrieve necessary form data."
-  );
-  console.log(
-    "Each object represents a day on which the business is open and stylist is NOT fully-booked."
-  );
-  console.log(
-    "Object keys contain the numeric date, array of timestamps for stylist's open (unbooked) schedule blocks on that date, and formatted date string."
-  );
-  console.log("openBlocks array:", openBlocks);
   return openBlocks;
+}
+
+export function getServices() {
+  return bookingPrefs.services.map((service) => {
+    return { title: `${service.name} – ${service.price}`, value: service.name };
+  });
+}
+
+export function getDateStringByTimeZone(timecode) {
+  const date = new Date(timecode);
+  const options = {
+    timeZone: bookingPrefs.timeZone,
+    weekday: "short",
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+  const dateString = new Intl.DateTimeFormat("en-US", options).format(date);
+  return dateString;
+}
+
+export async function fetchAndParseStylistName(data) {
+  try {
+    const response = await getOneStylist(data);
+    if (!response.ok) throw new Error("Error fetching stylist");
+    const stylist = await response.json();
+    return stylist;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function createAppointment(data) {
+  try {
+    const response = await postAppointment(data);
+    if (!response.ok) throw new Error("Error creating appointment");
+    const appointment = await response.json();
+    console.log(appointment);
+    return appointment;
+  } catch (err) {
+    console.error(err);
+    return new Error(err);
+  }
 }

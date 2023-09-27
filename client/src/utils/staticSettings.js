@@ -34,4 +34,22 @@ export const bookingPrefs = {
       isOpen: false,
     },
   },
+  services: [
+    {
+      name: "Haircut",
+      price: "$30",
+    },
+    {
+      name: "Shave",
+      price: "$25",
+    },
+    {
+      name: "Hair trim",
+      price: "$20",
+    },
+    {
+      name: "Beard trim",
+      price: "$20",
+    },
+  ],
 };
