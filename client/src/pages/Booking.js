@@ -73,6 +73,11 @@ export default function Booking() {
           goBack={revertStage}
         />
       );
+      break;
+    case "review":
+      console.log(requestData);
+      prompt = "Does everything look correct?";
+      whichContent = <div>Content</div>;
   }
 
   return (

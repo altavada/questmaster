@@ -79,3 +79,9 @@ export function parseAvailableBlocks(stylistAppointments) {
   }
   return openBlocks;
 }
+
+export function getServices() {
+  return bookingPrefs.services.map((service) => {
+    return { title: `${service.name} – ${service.price}`, value: service.name };
+  });
+}

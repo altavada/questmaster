@@ -2,16 +2,7 @@ import Dropdown from "./Dropdown";
 import Input from "./Input";
 import Button from "./Button";
 import { useState } from "react";
-
-const options = [
-  { title: "Option 1", value: "option1" },
-  { title: "Option 2", value: "option2" },
-  { title: "Option 3", value: "option3" },
-];
-
-const spacer = {
-  margin: "0px 10px",
-};
+import { getServices } from "../utils/aux";
 
 export default function What({ sendDetails, goBack }) {
   const [submitReady, setSubmitReady] = useState(false);
@@ -22,8 +13,6 @@ export default function What({ sendDetails, goBack }) {
     email: "",
     service: "",
   });
-
-  const availableServices = () => options;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +78,7 @@ export default function What({ sendDetails, goBack }) {
         <div className="wb-content">
           <Dropdown
             name="service"
-            fetchOptions={availableServices}
+            fetchOptions={getServices}
             handleChange={handleInputChange}
           />
         </div>
@@ -98,12 +87,7 @@ export default function What({ sendDetails, goBack }) {
             fade ? "wb-content fade-out-quicker" : "wb-content fade-in"
           }
         >
-          <Button
-            type="button"
-            styling={spacer}
-            text="Go Back"
-            onClick={() => goBack("when")}
-          />
+          <Button type="button" text="Go Back" onClick={() => goBack("when")} />
           {submitReady && <Button type="submit" text="Continue" />}
         </div>
       </form>
