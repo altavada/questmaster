@@ -15,6 +15,7 @@ const spacer = {
 
 export default function What({ sendDetails, goBack }) {
   const [submitReady, setSubmitReady] = useState(false);
+  const [fade, setFade] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     phone: "",
@@ -31,10 +32,20 @@ export default function What({ sendDetails, goBack }) {
     checkIfReady(newInputs);
   };
 
+  const handleFade = () => {
+    setFade(true);
+    setTimeout(() => {
+      setSubmitReady(!submitReady);
+      setFade(false);
+    }, 500);
+  };
+
   const checkIfReady = (data) => {
     const { name, phone, email, service } = data;
     if (name && phone && email && service) {
-      setSubmitReady(true);
+      !submitReady && handleFade();
+    } else if (submitReady) {
+      handleFade();
     }
   };
 
@@ -43,7 +54,8 @@ export default function What({ sendDetails, goBack }) {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    console.log(formJson);
+    // console.log(formJson);
+    sendDetails(formJson, "details", "review");
   };
 
   return (
@@ -81,7 +93,11 @@ export default function What({ sendDetails, goBack }) {
             handleChange={handleInputChange}
           />
         </div>
-        <div className="wb-content">
+        <div
+          className={
+            fade ? "wb-content fade-out-quicker" : "wb-content fade-in"
+          }
+        >
           <Button
             type="button"
             styling={spacer}

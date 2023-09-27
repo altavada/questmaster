@@ -8,6 +8,8 @@ export default function Booking() {
   const transitionTime = 1000;
   const [inputStylist, setInputStylist] = useState("");
   const [inputTime, setInputTime] = useState("");
+  const [details, setDetails] = useState({});
+  const [requestData, setRequestData] = useState({});
   const [onStage, setOnStage] = useState("who");
   const [fade, setFade] = useState(false);
 
@@ -20,6 +22,10 @@ export default function Booking() {
           break;
         case "time":
           setInputTime(data);
+          break;
+        case "details":
+          setDetails(data);
+          setRequestData({ ...data, time: inputTime, stylist: inputStylist });
       }
       setOnStage(toStage);
       setFade(false);

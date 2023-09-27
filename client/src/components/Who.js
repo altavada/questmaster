@@ -46,7 +46,7 @@ export default function Who({ sendStylistId, handleReturn }) {
                 setTimeout(() => {
                   setIsSelectionMade(true);
                   setFade(false);
-                }, 400);
+                }, 500);
               }
             }}
           />
