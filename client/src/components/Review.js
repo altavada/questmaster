@@ -11,6 +11,7 @@ export default function Review({ requestData, goBack }) {
   const [dateString, setDateString] = useState("");
 
   useEffect(() => {
+    console.log(requestData);
     fetchAndParseStylistName(requestData.stylist).then((data) =>
       setStylistName(data.name)
     );

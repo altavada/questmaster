@@ -43,7 +43,7 @@ export default function What({ sendDetails, goBack }) {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    sendDetails({ body: formJson, type: "details", stage: "review" });
+    sendDetails({ body: formJson, stage: "review" });
   };
 
   return (

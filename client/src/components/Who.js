@@ -24,7 +24,10 @@ export default function Who({ sendStylistId, handleReturn }) {
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    sendStylistId({ body: formJson.stylist, type: "stylist", stage: "when" });
+    sendStylistId({
+      body: { stylist: formJson.stylist },
+      stage: "when",
+    });
   };
 
   return (
