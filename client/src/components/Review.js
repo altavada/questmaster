@@ -6,7 +6,7 @@ import {
 } from "../utils/aux";
 import Button from "./Button";
 
-export default function Review({ requestData, goBack }) {
+export default function Review({ requestData, goBack, goToConfirm }) {
   const [stylistName, setStylistName] = useState("");
   const [dateString, setDateString] = useState("");
 
@@ -31,7 +31,10 @@ export default function Review({ requestData, goBack }) {
           type="button"
           text="Book it!"
           styling={{ backgroundColor: "green" }}
-          onClick={() => createAppointment(requestData)}
+          onClick={() => {
+            createAppointment(requestData);
+            goToConfirm({ body: requestData, stage: "confirm" });
+          }}
         />
       </div>
     </>

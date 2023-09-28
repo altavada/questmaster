@@ -170,7 +170,6 @@ h2 {
 @media screen and (max-width: 415px) {
     .work-box {
         width: 90%;
-        height: 375px;
     }
     .dropdown {
         height: 50px;

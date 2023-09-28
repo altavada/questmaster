@@ -4,6 +4,7 @@ import Who from "../components/Who";
 import When from "../components/When";
 import What from "../components/What";
 import Review from "../components/Review";
+import Confirmation from "../components/Confirmation";
 
 export default function Booking() {
   const transitionTime = 1000;
@@ -69,9 +70,6 @@ export default function Booking() {
               handleReturn={backToHome}
             />
           )}
-          {onStage === "what" && (
-            <What sendDetails={setDataFromComponent} goBack={revertStage} />
-          )}
           {onStage === "when" && (
             <When
               who={requestData.stylist}
@@ -79,9 +77,17 @@ export default function Booking() {
               goBack={revertStage}
             />
           )}
-          {onStage === "review" && (
-            <Review requestData={requestData} goBack={revertStage} />
+          {onStage === "what" && (
+            <What sendDetails={setDataFromComponent} goBack={revertStage} />
           )}
+          {onStage === "review" && (
+            <Review
+              requestData={requestData}
+              goToConfirm={setDataFromComponent}
+              goBack={revertStage}
+            />
+          )}
+          {onStage === "confirm" && <Confirmation />}
         </div>
       </div>
     </div>
