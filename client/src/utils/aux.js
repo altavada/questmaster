@@ -1,5 +1,5 @@
 import {
-  getStylistAppointments,
+  getFutureStylistAppointments,
   getStylists,
   getOneStylist,
   postAppointment,
@@ -23,7 +23,7 @@ export async function getStylistData() {
 
 export async function getAppointmentData(who) {
   try {
-    const response = await getStylistAppointments(who);
+    const response = await getFutureStylistAppointments(who);
     if (!response.ok) throw new Error("Something went wrong");
     const appointments = await response.json();
     return appointments.map((appt) => appt.time);

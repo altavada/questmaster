@@ -58,6 +58,7 @@ export default function Booking() {
           {onStage === "when" && "When would you like to come see us?"}
           {onStage === "what" && "Tell us about your visit"}
           {onStage === "review" && "Does everything look correct?"}
+          {onStage === "confirm" && "Appointment Confirmation"}
         </h2>
       </div>
       <div className="fade-in-slow">

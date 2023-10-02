@@ -21,9 +21,40 @@ module.exports = {
       res.status(500).json({ message: "Internal server error", err });
     }
   },
+  // past and future appts
   async getAppts(req, res) {
     try {
       const appts = await Appointment.find();
+      if (!appts || appts.length == 0) {
+        return res.status(400).json({ message: "No appointments found" });
+      }
+      res.json(appts);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
+    }
+  },
+  async getFutureAppts(req, res) {
+    try {
+      const now = Date.now();
+      const appts = await Appointment.find({
+        time: { $gt: now },
+      });
+      if (!appts || appts.length == 0) {
+        return res.status(400).json({ message: "No appointments found" });
+      }
+      res.json(appts);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
+    }
+  },
+  async getArchivedAppts(req, res) {
+    try {
+      const now = Date.now();
+      const appts = await Appointment.find({
+        time: { $lt: now },
+      });
       if (!appts || appts.length == 0) {
         return res.status(400).json({ message: "No appointments found" });
       }
@@ -52,7 +83,55 @@ module.exports = {
       if (!stylist) {
         return res.status(400).json({ message: "No such stylist" });
       }
-      const appointments = await Appt.find({ stylist: stylistId });
+      const appointments = await Appt.find({
+        stylist: stylistId,
+      });
+      if (!appointments || appointments.length === 0) {
+        return res
+          .status(400)
+          .json({ message: "No appointments found for this stylist" });
+      }
+      res.json(appointments);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
+    }
+  },
+  async getFutureApptsByStylist({ params }, res) {
+    try {
+      const stylistId = params.stylist;
+      const stylist = await Stylist.findById(stylistId);
+      if (!stylist) {
+        return res.status(400).json({ message: "No such stylist" });
+      }
+      const now = Date.now();
+      const appointments = await Appt.find({
+        time: { $gt: now },
+        stylist: stylistId,
+      });
+      if (!appointments || appointments.length === 0) {
+        return res
+          .status(400)
+          .json({ message: "No appointments found for this stylist" });
+      }
+      res.json(appointments);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal server error", err });
+    }
+  },
+  async getArchivedApptsByStylist({ params }, res) {
+    try {
+      const stylistId = params.stylist;
+      const stylist = await Stylist.findById(stylistId);
+      if (!stylist) {
+        return res.status(400).json({ message: "No such stylist" });
+      }
+      const now = Date.now();
+      const appointments = await Appt.find({
+        time: { $lt: now },
+        stylist: stylistId,
+      });
       if (!appointments || appointments.length === 0) {
         return res
           .status(400)

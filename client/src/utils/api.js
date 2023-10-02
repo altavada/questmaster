@@ -14,6 +14,14 @@ export const getStylistAppointments = (stylist) => {
   });
 };
 
+export const getFutureStylistAppointments = (stylist) => {
+  return fetch(`/api/appointments/stylist/future/${stylist}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
 export const getOneStylist = (stylist) => {
   return fetch(`/api/stylists/${stylist}`, {
     headers: {

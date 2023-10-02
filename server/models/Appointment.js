@@ -30,6 +30,11 @@ const apptSchema = new Schema({
     type: String,
     required: true,
   },
+  // isArchived: {
+  //   type: Boolean,
+  //   required: true,
+  //   default: false,
+  // },
 });
 
 // middleware to prevent double-booking
