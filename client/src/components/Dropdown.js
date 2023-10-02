@@ -5,6 +5,8 @@ export default function Dropdown({
   fetchOptions,
   handleChange,
   selectedValue,
+  returnVal,
+  snowflake,
 }) {
   const [blurWarning, setBlurWarning] = useState(false);
   const [onVal, setOnVal] = useState("null");
@@ -12,6 +14,9 @@ export default function Dropdown({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (selectedValue) {
+      setOnVal(selectedValue);
+    }
     const runFetch = async () => {
       try {
         const response = await fetchOptions();
@@ -24,13 +29,17 @@ export default function Dropdown({
     runFetch();
   }, []);
 
+  useEffect(() => snowflake && setOnVal(snowflake), [snowflake]);
+
+  useEffect(() => returnVal && returnVal(onVal), [onVal]);
+
   return (
     <select
-      value={selectedValue || onVal}
+      value={onVal || "null"}
       className="dropdown"
       name={name}
       onChange={(e) => {
-        !selectedValue && setOnVal(e.target.value);
+        setOnVal(e.target.value);
         blurWarning && setBlurWarning(false);
         handleChange && handleChange(e);
       }}

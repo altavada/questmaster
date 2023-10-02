@@ -22,6 +22,7 @@ export default function Booking() {
 
   useEffect(() => {
     if (!dataFromComponent) return;
+    console.log('component data:', dataFromComponent);
     const { body, stage } = dataFromComponent;
     setFade(true);
     setRequestData((prev) => ({ ...prev, ...body }));
@@ -69,6 +70,7 @@ export default function Booking() {
             <Who
               sendStylistId={setDataFromComponent}
               handleReturn={backToHome}
+              priorSelection={requestData.stylist}
             />
           )}
           {onStage === "when" && (
@@ -76,6 +78,7 @@ export default function Booking() {
               who={requestData.stylist}
               sendTime={setDataFromComponent}
               goBack={revertStage}
+              priorSelection={requestData.time}
             />
           )}
           {onStage === "what" && (

@@ -2,23 +2,62 @@ import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import { getAppointmentData } from "../utils/aux";
-import { parseAvailableBlocks } from "../utils/aux";
+import { parseAvailableBlocks, parseTimecode } from "../utils/aux";
 
-const spacer = {
-  margin: "0px 10px",
-};
-
-export default function When({ who, sendTime, goBack }) {
+export default function When({ who, sendTime, goBack, priorSelection }) {
   const [buttonFade, setButtonFade] = useState(false);
-  const [isDateSelected, setIsDateSelected] = useState(false);
-  const [isTimeSelected, setIsTimeSelected] = useState(false);
   const [blocking, setBlocking] = useState([]);
   const [timeBlocking, setTimeBlocking] = useState([]);
   const [onBlock, setOnBlock] = useState("null");
+  const [onDate, setOnDate] = useState("null");
+  const [renderTimeSelect, setRenderTimeSelect] = useState(false);
+  const [stageContinue, setStageContinue] = useState(false);
+  const [repopulate, setRepopulate] = useState(false);
+
+  useEffect(() => {
+    if (priorSelection && blocking.length) {
+      const { date, time } = parseTimecode(priorSelection);
+      setOnBlock(time);
+      setOnDate(date);
+      setRepopulate(true);
+    }
+  }, [priorSelection, blocking]);
+
+  useEffect(() => {
+    if (onDate !== "null") {
+      repopulate ? setRepopulate(false) : setOnBlock("null");
+      setTimeBlocking(
+        blocking
+          .find((obj) => obj.date === onDate)
+          .openings.map((timestamp) => {
+            return { title: timestamp, value: timestamp };
+          })
+      );
+      if (onBlock !== "null" || !renderTimeSelect) {
+        setButtonFade(true);
+        setTimeout(() => {
+          setRenderTimeSelect(true);
+          setButtonFade(false);
+          setStageContinue(false);
+        }, 500);
+      }
+    }
+  }, [onDate]);
+
+  useEffect(() => {
+    if (onBlock !== "null" && !stageContinue) {
+      setButtonFade(true);
+      setTimeout(() => {
+        setButtonFade(false);
+        setStageContinue(true);
+      }, 500);
+    }
+  }, [onBlock]);
 
   const fetchAndParse = async () => {
     try {
       let appts = await getAppointmentData(who);
+      console.log("fetched appts:", appts);
       let blockData = parseAvailableBlocks(appts);
       setBlocking(blockData);
       return blockData.map((block) => {
@@ -32,42 +71,9 @@ export default function When({ who, sendTime, goBack }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
-    const UTCtimestamp = new Date(
-      `${formJson.date} ${formJson.time}`
-    ).getTime();
-    sendTime({ body: { time: UTCtimestamp }, stage: "what" });
-  };
-
-  const handleDateOnChange = (e) => {
-    onBlock !== "null" && setOnBlock("null");
-    setTimeBlocking(
-      blocking
-        .find((obj) => obj.date === e.target.value)
-        .openings.map((timestamp) => {
-          return { title: timestamp, value: timestamp };
-        })
-    );
-    if (!isDateSelected || (isDateSelected && isTimeSelected)) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        isDateSelected ? setIsTimeSelected(false) : setIsDateSelected(true);
-      }, 500);
-    }
-  };
-
-  const handleTimeOnChange = (e) => {
-    setOnBlock(e.target.value);
-    if (!isTimeSelected) {
-      setButtonFade(true);
-      setTimeout(() => {
-        setButtonFade(false);
-        setIsTimeSelected(true);
-      }, 500);
-    }
+    const time = new Date(`${onDate} ${onBlock}`).getTime();
+    console.log(time);
+    sendTime({ body: { time }, stage: "what" });
   };
 
   return (
@@ -78,42 +84,37 @@ export default function When({ who, sendTime, goBack }) {
           <Dropdown
             name="date"
             fetchOptions={fetchAndParse}
-            handleChange={handleDateOnChange}
+            selectedValue={onDate}
+            returnVal={(data) => setOnDate(data)}
+            snowflake={onDate}
           />
         </div>
-        {isDateSelected && (
+        {renderTimeSelect && (
           <div className="fade-in">
             <label className="wb-content">Pick a time</label>
             <div className="wb-content">
               <Dropdown
                 name="time"
                 fetchOptions={() => timeBlocking}
-                handleChange={handleTimeOnChange}
                 selectedValue={onBlock}
+                returnVal={(data) => setOnBlock(data)}
               />
             </div>
           </div>
         )}
         <div
           className={
-            isDateSelected
-              ? buttonFade
-                ? "wb-content fade-out-quick"
-                : isTimeSelected
+            buttonFade
+              ? "wb-content fade-out-quicker"
+              : renderTimeSelect
+              ? stageContinue
                 ? "wb-content fade-in"
                 : "wb-content fade-in-slow"
-              : buttonFade
-              ? "wb-content fade-out-quicker"
-              : "wb-content"
+              : "wb-content fade-in"
           }
         >
-          <Button
-            type="button"
-            // styling={spacer}
-            text="Go Back"
-            onClick={() => goBack("who")}
-          />
-          {isTimeSelected && isDateSelected && (
+          <Button type="button" text="Go Back" onClick={() => goBack("who")} />
+          {renderTimeSelect && stageContinue && (
             <Button type="submit" text="Continue" />
           )}
         </div>

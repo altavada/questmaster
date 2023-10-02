@@ -81,6 +81,19 @@ export function parseAvailableBlocks(stylistAppointments) {
   return openBlocks;
 }
 
+export function parseTimecode(timecode) {
+  const stamp = new Date(timecode);
+  const date = stamp.toLocaleDateString();
+  let hours = stamp.getHours();
+  let minutes = stamp.getMinutes();
+  let ampm = hours >= 12 ? "PM" : "AM";
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours % 12 || 12;
+  let time = `${hours}:${minutes} ${ampm}`;
+  console.log({ date, time });
+  return { date, time };
+}
+
 export function getServices() {
   return bookingPrefs.services.map((service) => {
     return { title: `${service.name} – ${service.price}`, value: service.name };
