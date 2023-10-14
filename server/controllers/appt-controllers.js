@@ -111,7 +111,7 @@ module.exports = {
       });
       if (!appointments || appointments.length === 0) {
         return res
-          .status(400)
+          .status(200)
           .json({ message: "No appointments found for this stylist" });
       }
       res.json(appointments);

@@ -26,6 +26,9 @@ export async function getAppointmentData(who) {
     const response = await getFutureStylistAppointments(who);
     if (!response.ok) throw new Error("Something went wrong");
     const appointments = await response.json();
+    if (appointments.message) {
+      return [];
+    }
     return appointments.map((appt) => appt.time);
   } catch (err) {
     console.error(err);

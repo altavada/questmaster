@@ -1,7 +1,13 @@
 const dotenv = require("dotenv");
-dotenv.config();
-const cors = require("cors");
+const result = dotenv.config();
 
+if (result.error) {
+  console.error("Dotenv config ERROR:", result.error);
+} else {
+  console.log("Dotenv config successful.");
+}
+
+const cors = require("cors");
 const express = require("express");
 const path = require("path");
 const db = require("./db/conn");
