@@ -6,36 +6,42 @@ export default function Dropdown({
   handleChange,
   selectedValue,
   returnVal,
-  snowflake,
+  inputs,
 }) {
   const [blurWarning, setBlurWarning] = useState(false);
-  const [onVal, setOnVal] = useState("null");
+  const [onVal, setOnVal] = useState(selectedValue || "null");
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (fetchOptions) {
+      const runFetch = async () => {
+        try {
+          const response = await fetchOptions();
+          console.log("Options", response);
+          setOptions(response);
+          setLoading(false);
+        } catch (err) {
+          console.error("Error fetching options:", err);
+        }
+      };
+      runFetch();
+    }
+    if (inputs) {
+      console.log("Options", inputs);
+      setOptions(inputs);
+      setLoading(false);
+    }
     if (selectedValue) {
       setOnVal(selectedValue);
     }
-    const runFetch = async () => {
-      try {
-        const response = await fetchOptions();
-        setOptions(response);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching options:", err);
-      }
-    };
-    runFetch();
-  }, []);
-
-  useEffect(() => snowflake && setOnVal(snowflake), [snowflake]);
+  }, [fetchOptions, inputs, selectedValue]);
 
   useEffect(() => returnVal && returnVal(onVal), [onVal]);
 
   return (
     <select
-      value={onVal || "null"}
+      value={onVal}
       className="dropdown"
       name={name}
       onChange={(e) => {

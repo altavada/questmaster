@@ -7,65 +7,80 @@ import { parseAvailableBlocks, parseTimecode } from "../utils/aux";
 export default function When({ who, sendTime, goBack, priorSelection }) {
   const [buttonFade, setButtonFade] = useState(false);
   const [blocking, setBlocking] = useState([]);
+  const [dateBlocking, setDateBlocking] = useState([]);
   const [timeBlocking, setTimeBlocking] = useState([]);
   const [onBlock, setOnBlock] = useState("null");
   const [onDate, setOnDate] = useState("null");
   const [renderTimeSelect, setRenderTimeSelect] = useState(false);
   const [stageContinue, setStageContinue] = useState(false);
-  const [repopulate, setRepopulate] = useState(false);
 
   useEffect(() => {
-    if (priorSelection && blocking.length) {
-      const { date, time } = parseTimecode(priorSelection);
-      setOnBlock(time);
-      setOnDate(date);
-      setRepopulate(true);
-    }
-  }, [priorSelection, blocking]);
+    console.log("Prior selections:", priorSelection);
+    const fetchAndParse = async () => {
+      try {
+        let appts = await getAppointmentData(who);
+        console.log("fetched appts:", appts);
+        let blockData = parseAvailableBlocks(appts);
+        setBlocking(blockData);
+        let options = blockData.map((block) => {
+          return { title: block.dateString, value: block.date };
+        });
+        console.log("date options:", options);
+        setDateBlocking(options);
 
-  useEffect(() => {
-    if (onDate !== "null") {
-      repopulate ? setRepopulate(false) : setOnBlock("null");
-      setTimeBlocking(
-        blocking
-          .find((obj) => obj.date === onDate)
-          .openings.map((timestamp) => {
-            return { title: timestamp, value: timestamp };
-          })
-      );
-      if (onBlock !== "null" || !renderTimeSelect) {
-        setButtonFade(true);
-        setTimeout(() => {
+        if (priorSelection.time && priorSelection.date) {
+          console.log("PS effect go");
           setRenderTimeSelect(true);
-          setButtonFade(false);
-          setStageContinue(false);
-        }, 500);
+          setTimeBlocking(
+            blockData
+              .find((obj) => obj.date === priorSelection.date)
+              .openings.map((timestamp) => {
+                return { title: timestamp, value: timestamp };
+              })
+          );
+          setOnDate(priorSelection.date);
+          setOnBlock(priorSelection.time);
+          setStageContinue(true);
+        }
+      } catch (err) {
+        console.error("Error fetching appointments:", err);
+        return new Error(err);
       }
-    }
-  }, [onDate]);
+    };
+    fetchAndParse();
+  }, [who]);
 
-  useEffect(() => {
-    if (onBlock !== "null" && !stageContinue) {
+  const handleDateChange = (e) => {
+    setOnDate(e.target.value);
+    console.log("Blocking:", blocking);
+    console.log("On Block:", onBlock);
+    setTimeBlocking(
+      blocking
+        .find((obj) => obj.date === e.target.value)
+        .openings.map((timestamp) => {
+          return { title: timestamp, value: timestamp };
+        })
+    );
+    if (onBlock !== "null" || !renderTimeSelect) {
+      console.log("time reset");
+      setOnBlock("null");
+      setButtonFade(true);
+      setTimeout(() => {
+        setRenderTimeSelect(true);
+        setButtonFade(false);
+        setStageContinue(false);
+      }, 500);
+    }
+  };
+
+  const handleTimeChange = (e) => {
+    setOnBlock(e.target.value);
+    if (e.target.value !== "null" && !stageContinue) {
       setButtonFade(true);
       setTimeout(() => {
         setButtonFade(false);
         setStageContinue(true);
       }, 500);
-    }
-  }, [onBlock]);
-
-  const fetchAndParse = async () => {
-    try {
-      let appts = await getAppointmentData(who);
-      console.log("fetched appts:", appts);
-      let blockData = parseAvailableBlocks(appts);
-      setBlocking(blockData);
-      return blockData.map((block) => {
-        return { title: block.dateString, value: block.date };
-      });
-    } catch (err) {
-      console.error("Error fetching appointments:", err);
-      return new Error(err);
     }
   };
 
@@ -83,10 +98,9 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
         <div className="wb-content">
           <Dropdown
             name="date"
-            fetchOptions={fetchAndParse}
+            inputs={dateBlocking}
             selectedValue={onDate}
-            returnVal={(data) => setOnDate(data)}
-            snowflake={onDate}
+            handleChange={handleDateChange}
           />
         </div>
         {renderTimeSelect && (
@@ -95,9 +109,9 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
             <div className="wb-content">
               <Dropdown
                 name="time"
-                fetchOptions={() => timeBlocking}
+                inputs={timeBlocking}
                 selectedValue={onBlock}
-                returnVal={(data) => setOnBlock(data)}
+                handleChange={handleTimeChange}
               />
             </div>
           </div>
