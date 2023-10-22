@@ -27,15 +27,21 @@ export default function Dropdown({
       };
       runFetch();
     }
+  }, [fetchOptions]);
+
+  useEffect(() => {
     if (inputs) {
       console.log("Options", inputs);
       setOptions(inputs);
       setLoading(false);
     }
+  }, [inputs]);
+
+  useEffect(() => {
     if (selectedValue) {
       setOnVal(selectedValue);
     }
-  }, [fetchOptions, inputs, selectedValue]);
+  }, [selectedValue]);
 
   useEffect(() => returnVal && returnVal(onVal), [onVal]);
 

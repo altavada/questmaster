@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import { getAppointmentData } from "../utils/aux";
-import { parseAvailableBlocks, parseTimecode } from "../utils/aux";
+import { parseAvailableBlocks } from "../utils/aux";
 
 export default function When({ who, sendTime, goBack, priorSelection }) {
   const [buttonFade, setButtonFade] = useState(false);

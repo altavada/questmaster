@@ -21,6 +21,12 @@ export default function Who({ sendStylistId, handleReturn, priorSelection }) {
   const [stylist, setStylist] = useState("null");
 
   useEffect(() => {
+    if (priorSelection) {
+      setIsSelectionMade(true);
+    }
+  }, [priorSelection]);
+
+  useEffect(() => {
     if (stylist !== "null" && !isSelectionMade) {
       setFade(true);
       setTimeout(() => {
