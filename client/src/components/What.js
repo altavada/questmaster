@@ -4,7 +4,7 @@ import Button from "./Button";
 import { useState, useEffect } from "react";
 import { getServices } from "../utils/aux";
 
-export default function What({ sendDetails, goBack }) {
+export default function What({ sendDetails, goBack, priorSelections }) {
   const [submitReady, setSubmitReady] = useState(false);
   const [fade, setFade] = useState(false);
   const [inputs, setInputs] = useState({
@@ -13,6 +13,14 @@ export default function What({ sendDetails, goBack }) {
     email: "",
     service: "",
   });
+
+  useEffect(() => {
+    const { customer, phone, email, service } = priorSelections;
+    if (customer && phone && email && service) {
+      setInputs(priorSelections);
+      setSubmitReady(true);
+    }
+  }, [priorSelections]);
 
   useEffect(() => {
     const { customer, phone, email, service } = inputs;
@@ -24,11 +32,12 @@ export default function What({ sendDetails, goBack }) {
   }, [inputs]);
 
   useEffect(() => {
-    if (!fade) return;
-    setTimeout(() => {
-      setSubmitReady(!submitReady);
-      setFade(false);
-    }, 500);
+    if (fade) {
+      setTimeout(() => {
+        setSubmitReady(!submitReady);
+        setFade(false);
+      }, 500);
+    }
   }, [fade]);
 
   const handleInputChange = (e) => {
@@ -53,6 +62,7 @@ export default function What({ sendDetails, goBack }) {
             info="Enter name here"
             name="customer"
             handleChange={handleInputChange}
+            value={inputs.customer}
           />
         </div>
         <div className="wb-content">
@@ -61,6 +71,7 @@ export default function What({ sendDetails, goBack }) {
             info={"Enter phone #"}
             name="phone"
             handleChange={handleInputChange}
+            value={inputs.phone}
           />
         </div>
         <div className="wb-content">
@@ -69,6 +80,7 @@ export default function What({ sendDetails, goBack }) {
             info={"Enter email"}
             name="email"
             handleChange={handleInputChange}
+            value={inputs.email}
           />
         </div>
         <label className="wb-content">Service:</label>
@@ -77,6 +89,7 @@ export default function What({ sendDetails, goBack }) {
             name="service"
             fetchOptions={getServices}
             handleChange={handleInputChange}
+            selectedValue={inputs.service}
           />
         </div>
         <div

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Input({ info, handleChange, name }) {
+export default function Input({ info, handleChange, name, value }) {
   const [placeholder, setPlaceholder] = useState(info);
   const [blurWarning, setBlurWarning] = useState(false);
 
@@ -28,6 +28,7 @@ export default function Input({ info, handleChange, name }) {
       onBlur={handleBlur}
       style={blurWarning ? { borderColor: "red" } : null}
       name={name}
+      value={value}
     ></input>
   );
 }

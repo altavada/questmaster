@@ -90,7 +90,16 @@ export default function Booking() {
             />
           )}
           {onStage === "what" && (
-            <What sendDetails={setDataFromComponent} goBack={revertStage} />
+            <What
+              sendDetails={setDataFromComponent}
+              goBack={revertStage}
+              priorSelections={{
+                customer: requestData.customer,
+                phone: requestData.phone,
+                email: requestData.email,
+                service: requestData.service,
+              }}
+            />
           )}
           {onStage === "review" && (
             <Review
