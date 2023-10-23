@@ -1,5 +1,5 @@
 import {
-  getStylistAppointments,
+  getFutureStylistAppointments,
   getStylists,
   getOneStylist,
   postAppointment,
@@ -23,9 +23,12 @@ export async function getStylistData() {
 
 export async function getAppointmentData(who) {
   try {
-    const response = await getStylistAppointments(who);
+    const response = await getFutureStylistAppointments(who);
     if (!response.ok) throw new Error("Something went wrong");
     const appointments = await response.json();
+    if (appointments.message) {
+      return [];
+    }
     return appointments.map((appt) => appt.time);
   } catch (err) {
     console.error(err);
@@ -79,6 +82,19 @@ export function parseAvailableBlocks(stylistAppointments) {
     onDate.setDate(onDate.getDate() + 1);
   }
   return openBlocks;
+}
+
+export function parseTimecode(timecode) {
+  const stamp = new Date(timecode);
+  const date = stamp.toLocaleDateString();
+  let hours = stamp.getHours();
+  let minutes = stamp.getMinutes();
+  let ampm = hours >= 12 ? "PM" : "AM";
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours % 12 || 12;
+  let time = `${hours}:${minutes} ${ampm}`;
+  console.log({ date, time });
+  return { date, time };
 }
 
 export function getServices() {

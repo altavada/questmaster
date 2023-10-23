@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getStylistData } from "../utils/aux";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
@@ -15,17 +15,31 @@ const padding = {
   marginTop: "3px",
 };
 
-export default function Who({ sendStylistId, handleReturn }) {
+export default function Who({ sendStylistId, handleReturn, priorSelection }) {
   const [isSelectionMade, setIsSelectionMade] = useState(false);
   const [fade, setFade] = useState(false);
+  const [stylist, setStylist] = useState("null");
+
+  useEffect(() => {
+    if (priorSelection) {
+      setIsSelectionMade(true);
+    }
+  }, [priorSelection]);
+
+  useEffect(() => {
+    if (stylist !== "null" && !isSelectionMade) {
+      setFade(true);
+      setTimeout(() => {
+        setIsSelectionMade(true);
+        setFade(false);
+      }, 500);
+    }
+  }, [stylist]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
     sendStylistId({
-      body: { stylist: formJson.stylist },
+      body: { stylist },
       stage: "when",
     });
   };
@@ -42,16 +56,9 @@ export default function Who({ sendStylistId, handleReturn }) {
         <div className="wb-content">
           <Dropdown
             name="stylist"
+            selectedValue={priorSelection}
             fetchOptions={getStylistData}
-            handleChange={() => {
-              if (!isSelectionMade) {
-                setFade(true);
-                setTimeout(() => {
-                  setIsSelectionMade(true);
-                  setFade(false);
-                }, 500);
-              }
-            }}
+            returnVal={(data) => setStylist(data)}
           />
         </div>
         <div

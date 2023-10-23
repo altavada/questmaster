@@ -5,32 +5,53 @@ export default function Dropdown({
   fetchOptions,
   handleChange,
   selectedValue,
+  returnVal,
+  inputs,
 }) {
   const [blurWarning, setBlurWarning] = useState(false);
-  const [onVal, setOnVal] = useState("null");
+  const [onVal, setOnVal] = useState(selectedValue || "null");
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const runFetch = async () => {
-      try {
-        const response = await fetchOptions();
-        setOptions(response);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching options:", err);
-      }
-    };
-    runFetch();
-  }, []);
+    if (fetchOptions) {
+      const runFetch = async () => {
+        try {
+          const response = await fetchOptions();
+          console.log("Options", response);
+          setOptions(response);
+          setLoading(false);
+        } catch (err) {
+          console.error("Error fetching options:", err);
+        }
+      };
+      runFetch();
+    }
+  }, [fetchOptions]);
+
+  useEffect(() => {
+    if (inputs) {
+      console.log("Options", inputs);
+      setOptions(inputs);
+      setLoading(false);
+    }
+  }, [inputs]);
+
+  useEffect(() => {
+    if (selectedValue) {
+      setOnVal(selectedValue);
+    }
+  }, [selectedValue]);
+
+  useEffect(() => returnVal && returnVal(onVal), [onVal]);
 
   return (
     <select
-      value={selectedValue || onVal}
+      value={onVal}
       className="dropdown"
       name={name}
       onChange={(e) => {
-        !selectedValue && setOnVal(e.target.value);
+        setOnVal(e.target.value);
         blurWarning && setBlurWarning(false);
         handleChange && handleChange(e);
       }}
