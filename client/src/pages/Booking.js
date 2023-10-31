@@ -108,7 +108,7 @@ export default function Booking() {
               goBack={revertStage}
             />
           )}
-          {onStage === "confirm" && <Confirmation />}
+          {onStage === "confirm" && <Confirmation backToHome={backToHome} />}
         </div>
       </div>
     </div>
