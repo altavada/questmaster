@@ -155,6 +155,10 @@ h2 {
     text-align: center;
 }
 
+.block {
+    display: block;
+}
+
 .work-box {
     background-color: var(--burnt);
     margin: auto;
