@@ -15,7 +15,6 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
   const [stageContinue, setStageContinue] = useState(false);
 
   useEffect(() => {
-    console.log("Prior selections:", priorSelection);
     const fetchAndParse = async () => {
       try {
         let appts = await getAppointmentData(who);
