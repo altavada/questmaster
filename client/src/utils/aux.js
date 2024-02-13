@@ -36,6 +36,8 @@ export async function getAppointmentData(who) {
   }
 }
 
+// filters and formats date/time options for new appointments
+// TODO: resolve time zone edge cases
 export function parseAvailableBlocks(stylistAppointments) {
   const dayNames = [
     "Sunday",
@@ -93,7 +95,6 @@ export function parseTimecode(timecode) {
   minutes = minutes < 10 ? `0${minutes}` : minutes;
   hours = hours % 12 || 12;
   let time = `${hours}:${minutes} ${ampm}`;
-  console.log({ date, time });
   return { date, time };
 }
 
@@ -135,7 +136,6 @@ export async function createAppointment(data) {
     const response = await postAppointment(data);
     if (!response.ok) throw new Error("Error creating appointment");
     const appointment = await response.json();
-    console.log(appointment);
     return appointment;
   } catch (err) {
     console.error(err);
