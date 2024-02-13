@@ -18,17 +18,14 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
     const fetchAndParse = async () => {
       try {
         let appts = await getAppointmentData(who);
-        console.log("fetched appts:", appts);
         let blockData = parseAvailableBlocks(appts);
         setBlocking(blockData);
         let options = blockData.map((block) => {
           return { title: block.dateString, value: block.date };
         });
-        console.log("date options:", options);
         setDateBlocking(options);
 
         if (priorSelection.time && priorSelection.date) {
-          console.log("PS effect go");
           setRenderTimeSelect(true);
           setTimeBlocking(
             blockData
@@ -42,7 +39,6 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
           setStageContinue(true);
         }
       } catch (err) {
-        console.error("Error fetching appointments:", err);
         return new Error(err);
       }
     };
@@ -51,8 +47,6 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
 
   const handleDateChange = (e) => {
     setOnDate(e.target.value);
-    console.log("Blocking:", blocking);
-    console.log("On Block:", onBlock);
     setTimeBlocking(
       blocking
         .find((obj) => obj.date === e.target.value)
@@ -61,7 +55,6 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
         })
     );
     if (onBlock !== "null" || !renderTimeSelect) {
-      console.log("time reset");
       setOnBlock("null");
       setButtonFade(true);
       setTimeout(() => {
@@ -86,7 +79,6 @@ export default function When({ who, sendTime, goBack, priorSelection }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const time = new Date(`${onDate} ${onBlock}`).getTime();
-    console.log(time);
     sendTime({ body: { time }, stage: "what" });
   };
 

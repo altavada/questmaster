@@ -18,7 +18,6 @@ export default function Dropdown({
       const runFetch = async () => {
         try {
           const response = await fetchOptions();
-          console.log("Options", response);
           setOptions(response);
           setLoading(false);
         } catch (err) {
@@ -31,7 +30,6 @@ export default function Dropdown({
 
   useEffect(() => {
     if (inputs) {
-      console.log("Options", inputs);
       setOptions(inputs);
       setLoading(false);
     }
